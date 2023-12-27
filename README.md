@@ -1,6 +1,6 @@
-# dash_money
+# Local Money 
 
-A new Flutter project.
+Flutter codebase for a decentralized P2P marketplace built on the Dash blockchain.
 
 ## Getting Started
 
