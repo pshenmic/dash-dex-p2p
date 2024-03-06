@@ -1,5 +1,5 @@
-exports.up = function(knex) {
-  return knex.schema.createTable("user-feedback", user => {
+module.exports.up = function(knex) {
+  return knex.schema.createTable("user_feedback", user => {
     user.increments();
     user.string("description");
     user.integer("rating").notNullable();
@@ -28,6 +28,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
-  return knex.schema.dropTableIfExists("user-feedback");
+module.exports.down = function(knex) {
+  return knex.schema.dropTableIfExists("user_feedback");
 };

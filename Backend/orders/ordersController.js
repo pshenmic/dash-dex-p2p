@@ -3,14 +3,12 @@ const chatModel = require("../chat/chatModel.js");
 
 const { mapOrderBody } = require("./ordersHelper");
 
-exports.createOrder = async (req, res) => {
+module.exports.createOrder = async (req, res) => {
   const { order, initial_message } = req.body;
   try {
     const savedOrder = await ordersModel.saveOrder(order);
     if (!savedOrder) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
 
     const messageBody = {
@@ -21,67 +19,66 @@ exports.createOrder = async (req, res) => {
 
     const newMessage = await chatModel.saveMessage(messageBody);
     if (!newMessage) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
     return res.status(201).json(savedOrder);
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    ResponseErrorHandler(res, 500, error);
   }
 };
 
-exports.getMyOrders = async (req, res) => {
+module.exports.getMyOrders = async (req, res) => {
+
   const { id } = req.params;
+  if (!id) {
+    ResponseErrorHandler(res, 400, "Please provide a valid id")
+  }
   try {
+
     const allMyOrders = await ordersModel.findMyOrders(id);
+
     if (!allMyOrders) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
+
     return res.status(200).json(allMyOrders);
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    ResponseErrorHandler(res, 500, error);
   }
 };
 
-exports.getCurrentOrder = async (req, res) => {
+module.exports.getCurrentOrder = async (req, res) => {
+
   const { userId, orderId } = req.params;
+
   try {
+
     const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
+
     if (!currentOrder) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
+
     return res.status(200).json(currentOrder);
+
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    ResponseErrorHandler(res, 500, error);
   }
 };
 
-exports.updateOrder = async (req, res) => {
+module.exports.updateOrder = async (req, res) => {
   const order = mapOrderBody(req.body);
 
   try {
     const updatedOrder = await ordersModel.updateOrderById(order);
+
     if (!updatedOrder) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
 
     return res.status(200).json(updatedOrder);
+
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    ResponseErrorHandler(res, 500, error);
   }
 };

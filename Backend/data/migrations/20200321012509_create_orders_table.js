@@ -1,4 +1,4 @@
-exports.up = function (knex) {
+module.exports.up = function (knex) {
   return knex.schema.createTable("orders", (orders) => {
     orders.increments();
     orders.boolean("complete").notNullable().defaultTo(false);
@@ -32,6 +32,6 @@ exports.up = function (knex) {
   });
 };
 
-exports.down = function (knex) {
+module.exports.down = function (knex) {
   return knex.schema.dropTableIfExists("orders");
 };

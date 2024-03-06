@@ -12,7 +12,7 @@ const createFakeOrders = (value) => {
     is_maker_buying: boolVal,
   };
 };
-exports.seed = function (knex) {
+module.exports.seed = function (knex) {
   let fakeOrders = [];
   for (let i = 1; i < 11; i++) {
     fakeOrders.push(createFakeOrders(i));
