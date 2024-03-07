@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+module.exports.up = function(knex) {
   return knex.schema.table("users", users => {
     users.string("blurb", 255);
     users.string("country", 255);
@@ -9,7 +9,7 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+module.exports.down = function(knex) {
   return knex.schema.table("users", users => {
     users.dropColumn("merchant");
     users.dropColumn("phone_verification");

@@ -2,92 +2,117 @@ const offersModel = require("./offersModel.js");
 const { updateBody } = require("./offersHelper");
 const io = require("../socket");
 
-exports.getMyOffers = async (req, res) => {
+module.exports.getOffersByMakerId = async (req, res) => {
+
   const maker_id = req.params;
+
   try {
+
     const myOffers = await offersModel.fetchMyOffers(maker_id);
     return res.status(200).json(myOffers);
+
   } catch (error) {
-    return res.status(500).json({ error });
+    ResponseErrorHandler(res, 500, error)
   }
 };
-exports.getAllOffers = async (req, res) => {
+module.exports.getAllOffers = async (req, res) => {
   try {
+
     const allOffers = await offersModel.fetchAllOffers();
     return res.status(200).json(allOffers);
+
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        errorMessage: "Oops, something went wrong while getting all offers",
-        error,
-      });
+    ResponseErrorHandler(res, 500, "Oops, something went wrong while getting all offers")
   }
 };
 
-exports.getOffer = async (req, res) => {
+module.exports.getOffer = async (req, res) => {
+
   const { id } = req.params;
+
+  if (!id) {
+    ResponseErrorHandler(res, 400, "Please provide a valid id")
+  }
+
   try {
+
     const myOffer = await offersModel.findById(id);
     return res.status(200).json(myOffer);
+
   } catch (error) {
-    return res.status(500).json({ error });
+    ResponseErrorHandler(res, 500, error)
   }
 };
 
-exports.createOffer = async (req, res) => {
+module.exports.createOffer = async (req, res) => {
+
   const newOffer = updateBody(req.body);
 
   try {
-    const newOfferInfo = await offersModel.saveOffer(newOffer);
 
-    if (!newOfferInfo) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your request",
-      });
-    }
+    const newOfferInfo = await offersModel.saveOffer(newOffer);
 
     io.getIO().emit("offers", { action: "create", offer: newOfferInfo });
 
     return res.status(201).json(newOfferInfo);
+
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    ResponseErrorHandler(res, 500, error)
   }
 };
 
-exports.updateOffer = async (req, res) => {
-  const { userId, offerId } = req.params;
-  const updatedOffer = updateBody(req.body);
+module.exports.updateOffer = async (req, res) => {
+
+  const { offerId } = req.params;
+
   try {
+
+    const isOfferExist = offersModel.checkOfferExistence(offerId);
+
+    if (!isOfferExist) {
+      ResponseErrorHandler(res, 404, "Offer or User not found!")
+    }
+
+    const updatedOffer = updateBody(req.body);
+
     const updateComplete = await offersModel.updateOffer(
       updatedOffer,
-      offerId,
-      userId
+      offerId
     );
 
     if (!updateComplete) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your request",
-      });
+      ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
+
     io.getIO().emit("offers", { action: "update", offer: updateComplete });
     //console.log("getIO", io.getIO());
+
     return res.status(200).json(updateComplete);
+
   } catch (error) {
-    return res.status(500).json({ error });
+    ResponseErrorHandler(res, 500, error)
   }
 };
 
-exports.deleteOffer = async (req, res) => {
-  const { userId, offerId } = req.params;
+module.exports.deleteOffer = async (req, res) => {
+
+  const { offerId } = req.params;
 
   try {
-    const result = await offersModel.deleteOfferById(userId, offerId);
+
+    const isOfferExist = offersModel.checkOfferExistence(offerId);
+
+    if (!isOfferExist) {
+      ResponseErrorHandler(res, 404, "Offer or User not found!")
+    }
+
+    const result = await offersModel.deleteOfferById(offerId);
+
     io.getIO().emit("offers", { action: "delete", id: result });
+
     return res.status(200).json(result);
+
   } catch (error) {
-    return res.status(500).json({ error });
+    ResponseErrorHandler(res, 500, error)
   }
 };

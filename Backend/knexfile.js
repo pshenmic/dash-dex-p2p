@@ -1,10 +1,8 @@
 // Update with your config settings.
-require("dotenv").config(); // load .env variables
-
 module.exports = {
   development: {
     client: "pg",
-    connection: process.env.DATABASE_DEV,
+    connection: process.env.DATABASE_URL,
     useNullAsDefault: true, // used to avoid warning on console
     migrations: {
       directory: "./data/migrations",
@@ -22,21 +20,6 @@ module.exports = {
     },
     seeds: {
       directory: "./data/seeds",
-    },
-  },
-  staging: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    migrations: {
-      tableName: "knex_migrations",
     },
   },
 

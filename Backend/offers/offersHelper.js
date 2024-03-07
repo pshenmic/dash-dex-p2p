@@ -38,6 +38,7 @@ const validateOfferBody = [
   },
 ];
 
+
 const updateBody = (body) => {
   const {
     buyBCH,

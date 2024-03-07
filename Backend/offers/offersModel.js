@@ -7,10 +7,15 @@ function findById(id) {
     .select("offers.*", "users.username");
 }
 
-async function saveOffer(newOffer) {
-  const [savedOffer] = await db("offers").insert(newOffer, "*");
+async function checkOfferExistence(offerId) {
+  return await db("offers")
+    .where({ id: offerId})
+    .select("offers.*", "users.username");
+}
 
-  return findById(savedOffer.id);
+async function saveOffer(newOffer) {
+  const [savedOfferId] = await db("offers").insert(newOffer, ["id"]);
+  return savedOfferId;
 }
 
 async function fetchMyOffers({ id }) {
@@ -24,15 +29,15 @@ async function fetchAllOffers() {
     .orderBy("updated_at", "desc");
 }
 
-async function updateOffer(updateOffer, offerId, userId) {
-  const [updatedOffer] = await db("offers")
-    .where({ id: offerId, maker_id: userId })
-    .update(updateOffer, "*");
-  return findById(updatedOffer.id);
+async function updateOffer(updateOffer, offerId) {
+  const [updatedOfferId] = await db("offers")
+    .where({ id: offerId})
+    .update(updateOffer, ["id"]);
+  return findById(updatedOfferId);
 }
 
-async function deleteOfferById(userId, offerId) {
-  return db("offers").where({ id: offerId, maker_id: userId }).del();
+async function deleteOfferById(offerId) {
+  return db("offers").where({ id: offerId}).del();
 }
 
 module.exports = {
@@ -42,4 +47,5 @@ module.exports = {
   fetchAllOffers,
   updateOffer,
   deleteOfferById,
+  checkOfferExistence
 };

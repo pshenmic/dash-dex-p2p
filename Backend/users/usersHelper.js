@@ -1,4 +1,3 @@
-require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 
@@ -31,16 +30,22 @@ const validateUser = [
     .trim(),
 
   (req, res, next) => {
+
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()) {
+
       const errorMessage = {};
+
       errors.array().forEach(i => {
         errorMessage[i.param] = i.msg;
       });
+
       res.status(400).json({
         status: 400,
         errorMessage
       });
+
     } else next();
   }
 ];

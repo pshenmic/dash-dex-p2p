@@ -1,41 +1,43 @@
 const chatModel = require("./chatModel.js");
 const io = require("../socket");
+const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler.js");
 
-exports.getAllMessages = async (req, res) => {
+module.exports.getAllMessages = async (req, res) => {
   const { order_id } = req.params;
   try {
+    
     const allMyOrders = await chatModel.findAllByOrderId(order_id);
+
     if (!allMyOrders) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your chat request",
-      });
+      return ResponseErrorHandler(res, 400, "Something went wrong with your chat request")
     }
+
     return res.status(200).json(allMyOrders);
+
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    return ResponseErrorHandler(res, 500, error)
   }
 };
 
-exports.createChat = async (req, res) => {
+module.exports.createChat = async (req, res) => {
+
+  const {text, author_id, order_id} = req.body
   try {
-    const savedMessage = await chatModel.saveMessage(req.body);
+
+    const savedMessage = await chatModel.saveMessage(text, author_id, order_id);
+
     if (!savedMessage) {
-      return res.status(400).json({
-        errorMessage: "Something went wrong with your trade request",
-      });
+      return ResponseErrorHandler(res, 400, "Something went wrong with your trade request")
     }
+
     io.getIO().to(req.body.order_id).emit("newMessage", {
       action: "create",
       message: savedMessage,
     });
-    return res
-      .status(201)
-      .json({ message: "Successfully created new message" });
+
+    return ResponseErrorHandler(res, 201, "Successfully created new message")
+
   } catch (error) {
-    return res.status(500).json({
-      errorMessage: error,
-    });
+    return ResponseErrorHandler(res, 500, error)
   }
 };

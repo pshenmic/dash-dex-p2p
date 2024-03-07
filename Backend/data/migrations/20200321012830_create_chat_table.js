@@ -1,4 +1,4 @@
-exports.up = function (knex) {
+module.exports.up = function (knex) {
   return knex.schema.createTable("chat", (chat) => {
     chat.increments();
     chat

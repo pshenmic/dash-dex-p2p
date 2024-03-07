@@ -17,7 +17,7 @@ const createFakeOffers = (value) => {
     trade_terms: faker.lorem.sentence(),
   };
 };
-exports.seed = function (knex) {
+module.exports.seed = function (knex) {
   let fakeOffers = [];
   for (let i = 1; i < 21; i++) {
     fakeOffers.push(createFakeOffers(i));

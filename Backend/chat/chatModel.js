@@ -1,7 +1,8 @@
 const db = require("../data/dbConfig");
 
-async function saveMessage(newMessage) {
-  return db("chat").insert(newMessage, "*");
+async function saveMessage(text, author_id, order_id) {
+  
+  return db("chat").insert({text, author_id, order_id}, ["text", "message_id", "order_id"]);
 }
 
 async function findAllByOrderId(id) {

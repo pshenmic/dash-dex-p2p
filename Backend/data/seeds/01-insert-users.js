@@ -11,7 +11,7 @@ const createFakeUser = () => {
   };
 };
 
-exports.seed = function (knex) {
+module.exports.seed = function (knex) {
   const fakeUsers = [];
   const desiredFakeUsers = 20;
   for (let i = 0; i < desiredFakeUsers; i++) {

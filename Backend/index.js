@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -32,18 +34,20 @@ server.all("*", (req, res) => {
 const port = process.env.PORT || 8000;
 
 if (process.env.NODE_ENV !== "test") {
+
   const serverIO = server.listen(
     port,
     console.log(`Listening on Port ${port}`)
   );
+
   const io = require("./socket").init(serverIO);
   io.on("connection", (socket) => {
     socket.on("joinRoom", (room) => {
       console.log("joined room");
       socket.join(room);
     });
-
     console.log("cient connected");
   });
+
 }
 module.exports = server;

@@ -1,7 +1,7 @@
-exports.up = function (knex) {
+module.exports.up = function (knex) {
   return knex.schema.createTable("offers", (offers) => {
     offers.increments();
-    offers.boolean("buyBCH").notNullable();
+    offers.boolean("buy_bch").notNullable();
     offers.string("country").notNullable();
     offers.string("city").notNullable();
     offers.string("payment_method").notNullable();
@@ -30,6 +30,6 @@ exports.up = function (knex) {
   });
 };
 
-exports.down = function (knex) {
+module.exports.down = function (knex) {
   return knex.schema.dropTableIfExists("offers");
 };
