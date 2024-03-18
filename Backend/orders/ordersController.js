@@ -2,11 +2,17 @@ const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
 
 const { mapOrderBody } = require("./ordersHelper");
+const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler.js");
+const { tryCatchHandler } = require("../ErrorsHandler/TryCatchHandler.js");
 
 module.exports.createOrder = async (req, res) => {
-  const { order, initial_message } = req.body;
-  try {
+
+  const tryFn = async () => {
+
+    const { order, initial_message } = req.body;
+
     const savedOrder = await ordersModel.saveOrder(order);
+
     if (!savedOrder) {
       ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
@@ -18,22 +24,25 @@ module.exports.createOrder = async (req, res) => {
     };
 
     const newMessage = await chatModel.saveMessage(messageBody);
+
     if (!newMessage) {
       ResponseErrorHandler(res, 400, "Something went wrong with your request")
     }
+
     return res.status(201).json(savedOrder);
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error);
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.getMyOrders = async (req, res) => {
 
-  const { id } = req.params;
-  if (!id) {
-    ResponseErrorHandler(res, 400, "Please provide a valid id")
-  }
-  try {
+  const tryFn = async () => {
+
+    const { id } = req.params;
+
+    if (!id) {
+      ResponseErrorHandler(res, 400, "Please provide a valid id")
+    }
 
     const allMyOrders = await ordersModel.findMyOrders(id);
 
@@ -42,16 +51,15 @@ module.exports.getMyOrders = async (req, res) => {
     }
 
     return res.status(200).json(allMyOrders);
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error);
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.getCurrentOrder = async (req, res) => {
 
-  const { userId, orderId } = req.params;
+  const tryFn = async () => {
 
-  try {
+    const { userId, orderId } = req.params;
 
     const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
 
@@ -61,15 +69,16 @@ module.exports.getCurrentOrder = async (req, res) => {
 
     return res.status(200).json(currentOrder);
 
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error);
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.updateOrder = async (req, res) => {
-  const order = mapOrderBody(req.body);
+  
+  const tryFn = async () => {
 
-  try {
+    const order = mapOrderBody(req.body);
+
     const updatedOrder = await ordersModel.updateOrderById(order);
 
     if (!updatedOrder) {
@@ -78,7 +87,6 @@ module.exports.updateOrder = async (req, res) => {
 
     return res.status(200).json(updatedOrder);
 
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error);
   }
+  return tryCatchHandler(tryFn)
 };

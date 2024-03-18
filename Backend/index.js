@@ -16,6 +16,7 @@ server.use(cors());
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+
 server.use("/api/auth", usersRoutes);
 server.use("/api/offers", offersRoutes);
 server.use("/api/orders", ordersRouters);

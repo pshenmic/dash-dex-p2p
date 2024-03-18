@@ -11,6 +11,7 @@ module.exports.up = function(knex) {
       .notNullable()
       .unique();
     users.boolean("push_notification").defaultTo(false);
+    users.boolean("isBlocked").defaultTo(false);
     users.timestamps(true, true);
   });
 };

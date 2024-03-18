@@ -13,10 +13,14 @@ const findById = id => {
       "id",
       "username",
       "email",
-      "push_notification",
-      "email_notification"
+      "push_notification"
     )
     .first();
+};
+
+const findByUsername = username => {
+  return db("users")
+    .where({ username })
 };
 
 const createUser = async user => {
@@ -39,5 +43,6 @@ module.exports = {
   findBy,
   createUser,
   findById,
-  updateUser
+  updateUser,
+  findByUsername
 };

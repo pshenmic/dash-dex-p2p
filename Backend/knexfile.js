@@ -1,8 +1,19 @@
 // Update with your config settings.
 module.exports = {
   development: {
-    client: "pg",
-    connection: process.env.DATABASE_URL,
+    // connection: process.env.DATABASE_URL,
+    client: "postgres",
+    connection: {
+      database: "dash-dex",
+      user: "postgres",
+      password: "1234",
+      port:5432,
+      host:'localhost'
+    },
+    pool: {
+      min: 2,
+      max: 10,
+    },
     useNullAsDefault: true, // used to avoid warning on console
     migrations: {
       directory: "./data/migrations",

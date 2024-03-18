@@ -1,71 +1,68 @@
 const offersModel = require("./offersModel.js");
 const { updateBody } = require("./offersHelper");
 const io = require("../socket");
+const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler.js");
+const { tryCatchHandler } = require("../ErrorsHandler/TryCatchHandler.js");
 
 module.exports.getOffersByMakerId = async (req, res) => {
 
-  const maker_id = req.params;
+  const tryFn = async () => {
 
-  try {
+    const maker_id = req.params;
 
     const myOffers = await offersModel.fetchMyOffers(maker_id);
-    return res.status(200).json(myOffers);
 
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error)
+    return res.status(200).json(myOffers);
   }
+  return tryCatchHandler(tryFn)
 };
+
 module.exports.getAllOffers = async (req, res) => {
-  try {
+
+  const tryFn = async () => {
 
     const allOffers = await offersModel.fetchAllOffers();
-    return res.status(200).json(allOffers);
 
-  } catch (error) {
-    ResponseErrorHandler(res, 500, "Oops, something went wrong while getting all offers")
+    return res.status(200).json(allOffers);
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.getOffer = async (req, res) => {
 
-  const { id } = req.params;
+  const tryFn = async () => {
+    const { id } = req.params;
 
-  if (!id) {
-    ResponseErrorHandler(res, 400, "Please provide a valid id")
-  }
-
-  try {
+    if (!id) {
+      ResponseErrorHandler(res, 400, "Please provide a valid id")
+    }
 
     const myOffer = await offersModel.findById(id);
     return res.status(200).json(myOffer);
-
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.createOffer = async (req, res) => {
 
-  const newOffer = updateBody(req.body);
+  const tryFn = async () => {
 
-  try {
+    const newOffer = updateBody(req.body);
 
     const newOfferInfo = await offersModel.saveOffer(newOffer);
 
     io.getIO().emit("offers", { action: "create", offer: newOfferInfo });
 
     return res.status(201).json(newOfferInfo);
-
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.updateOffer = async (req, res) => {
 
-  const { offerId } = req.params;
+  const tryFn = async () => {
 
-  try {
+    const { offerId } = req.params;
 
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
@@ -88,17 +85,15 @@ module.exports.updateOffer = async (req, res) => {
     //console.log("getIO", io.getIO());
 
     return res.status(200).json(updateComplete);
-
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.deleteOffer = async (req, res) => {
 
-  const { offerId } = req.params;
+  const tryFn = async () => {
 
-  try {
+    const { offerId } = req.params;
 
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
@@ -112,7 +107,6 @@ module.exports.deleteOffer = async (req, res) => {
 
     return res.status(200).json(result);
 
-  } catch (error) {
-    ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };

@@ -1,10 +1,13 @@
 const chatModel = require("./chatModel.js");
 const io = require("../socket");
 const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler.js");
+const { tryCatchHandler } = require("../ErrorsHandler/TryCatchHandler.js");
 
 module.exports.getAllMessages = async (req, res) => {
-  const { order_id } = req.params;
-  try {
+
+  const tryFn = async() => {
+
+    const { order_id } = req.params;
     
     const allMyOrders = await chatModel.findAllByOrderId(order_id);
 
@@ -13,17 +16,15 @@ module.exports.getAllMessages = async (req, res) => {
     }
 
     return res.status(200).json(allMyOrders);
-
-  } catch (error) {
-    return ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };
 
 module.exports.createChat = async (req, res) => {
 
-  const {text, author_id, order_id} = req.body
-  
-  try {
+  const tryFn = async () => {
+
+    const {text, author_id, order_id} = req.body
 
     const savedMessage = await chatModel.saveMessage(text, author_id, order_id);
 
@@ -38,7 +39,6 @@ module.exports.createChat = async (req, res) => {
 
     return ResponseErrorHandler(res, 201, "Successfully created new message")
 
-  } catch (error) {
-    return ResponseErrorHandler(res, 500, error)
   }
+  return tryCatchHandler(tryFn)
 };
