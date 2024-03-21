@@ -1,7 +1,7 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
 const { mapOrderBody } = require("./ordersHelper.js");
-const { responseErrorHandler } = require("../ErrorsHandler/responseErrorHandler.js");
+const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler.js");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -10,6 +10,7 @@ module.exports.createOrder = async (req, res) => {
   let transaction;
 
   transaction = await db.transaction();
+  
   const savedOrder = await ordersModel.saveOrder(order, transaction);
 
   if (!savedOrder) {

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { ResponseErrorHandler } = require("../ErrorsHandler/responseErrorHandler");
+const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler");
 const { findByUsername } = require("../users/usersModels");
 
 const secret = process.env.JWT_SECRET || "default";
@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
     const authHeader = req.get("Authorization");
 
     if (!authHeader) {
-      ResponseErrorHandler(res, 400, "Not allowed to access this route")
+      responseErrorHandler(res, 400, "Not allowed to access this route")
     }
 
     const token = authHeader.split(" ")[1];
@@ -25,17 +25,17 @@ module.exports = (req, res, next) => {
 
         if (users[0]?.isBlocked) {
 
-          return ResponseErrorHandler(res, 403, "Your Account has been Suspended")
+          return responseErrorHandler(res, 403, "Your Account has been Suspended")
 
         } else {
           req.userId = decodedToken.userId;
           return next();
         }
       } else {
-        return ResponseErrorHandler(res, 401, "Not allowed to access this route")
+        return responseErrorHandler(res, 401, "Not allowed to access this route")
       }
     })
   } catch (err) {
-    ResponseErrorHandler(res, 401, "Not allowed to access this route")
+    responseErrorHandler(res, 401, "Not allowed to access this route")
   }
 };

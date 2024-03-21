@@ -1,9 +1,10 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
 const { generateToken } = require("./usersHelper");
-const { responseErrorHandler } = require("../ErrorsHandler/responseErrorHandler");
+const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler");
 
 module.exports.signup = async (req, res) => {
+  
   const { email, username, password } = req.body;
 
   const existingUser = await User.findExistingUser(username,email);

@@ -1,7 +1,7 @@
 const offersModel = require("./offersModel.js");
 const { updateBody } = require("./offersHelper.js");
 const io = require("../socket.js");
-const { responseErrorHandler } = require("../ErrorsHandler/responseErrorHandler.js");
+const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler.js");
 
 module.exports.getOffersByMakerId = async (req, res) => {
 
@@ -23,7 +23,7 @@ module.exports.getOffer = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      responseErrorHandler(res, 400, "Please provide a valid id")
+      responseErrorHandler(res, 500, "Please provide a valid id")
     }
 
     const myOffer = await offersModel.findById(id);

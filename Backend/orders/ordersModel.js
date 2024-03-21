@@ -5,7 +5,7 @@ function findById(id) {
 }
 
 async function saveOrder(newOrder) {
-  const [savedOrderId] = await db("orders").insert(newOrder, ["id"]);
+  const [savedOrderId] = await db("orders").insert(newOrder).returning("id");
   return findById(savedOrderId);
 }
 

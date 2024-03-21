@@ -1,6 +1,6 @@
 const chatModel = require("./chatModel.js");
 const io = require("../socket.js");
-const { responseErrorHandler } = require("../ErrorsHandler/responseErrorHandler.js");
+const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler.js");
 
 module.exports.getAllMessages = async (req, res) => {
 
