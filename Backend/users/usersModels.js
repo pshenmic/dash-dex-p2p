@@ -23,6 +23,14 @@ const findByUsername = username => {
     .where({ username })
 };
 
+const findExistingUser = (username, email) => {
+  return db("users")
+  .where(builder => {
+    builder.where("username", username)
+           .orWhere("email", email);
+  });
+};
+
 const createUser = async user => {
   return db("users").insert(user, ["id", "email", "username"]);
 };
@@ -44,5 +52,6 @@ module.exports = {
   createUser,
   findById,
   updateUser,
-  findByUsername
+  findByUsername,
+  findExistingUser
 };

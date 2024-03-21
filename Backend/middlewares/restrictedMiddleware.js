@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler");
+const { ResponseErrorHandler } = require("../ErrorsHandler/responseErrorHandler");
 const { findByUsername } = require("../users/usersModels");
 
 const secret = process.env.JWT_SECRET || "default";

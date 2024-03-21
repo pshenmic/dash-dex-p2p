@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+require('express-async-errors')
 const helmet = require("helmet");
 const cors = require("cors");
 
@@ -21,6 +22,12 @@ server.use("/api/auth", usersRoutes);
 server.use("/api/offers", offersRoutes);
 server.use("/api/orders", ordersRouters);
 server.use("/api/chat", chatRouters);
+
+// Define error-handling middleware
+server.use((err, req, res, next) => {
+  // Handle errors here
+  res.status(500).send('Something went wrong!');
+});
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: "Local Bitcoin Clone API" });

@@ -1,92 +1,79 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
-
-const { mapOrderBody } = require("./ordersHelper");
-const { ResponseErrorHandler } = require("../ErrorsHandler/ResponseErrorHandler.js");
-const { tryCatchHandler } = require("../ErrorsHandler/TryCatchHandler.js");
+const { mapOrderBody } = require("./ordersHelper.js");
+const { responseErrorHandler } = require("../ErrorsHandler/responseErrorHandler.js");
 
 module.exports.createOrder = async (req, res) => {
 
-  const tryFn = async () => {
+  const { order, initial_message } = req.body;
 
-    const { order, initial_message } = req.body;
+  let transaction;
 
-    const savedOrder = await ordersModel.saveOrder(order);
+  transaction = await db.transaction();
+  const savedOrder = await ordersModel.saveOrder(order, transaction);
 
-    if (!savedOrder) {
-      ResponseErrorHandler(res, 400, "Something went wrong with your request")
-    }
-
-    const messageBody = {
-      order_id: savedOrder.id,
-      text: initial_message,
-      author_id: savedOrder.taker_id,
-    };
-
-    const newMessage = await chatModel.saveMessage(messageBody);
-
-    if (!newMessage) {
-      ResponseErrorHandler(res, 400, "Something went wrong with your request")
-    }
-
-    return res.status(201).json(savedOrder);
+  if (!savedOrder) {
+    await transaction.rollback();
+    return responseErrorHandler(res, 404, "Order not found");
   }
-  return tryCatchHandler(tryFn)
+
+  const messageBody = {
+    order_id: savedOrder.id,
+    text: initial_message,
+    author_id: savedOrder.taker_id,
+  };
+
+  const newMessage = await chatModel.saveMessage(messageBody, transaction);
+
+  if (!newMessage) {
+    await transaction.rollback();
+    return responseErrorHandler(res, 404, "Message not found");
+  }
+
+  await transaction.commit();
+
+  return res.status(201).json(savedOrder);
 };
 
 module.exports.getMyOrders = async (req, res) => {
 
-  const tryFn = async () => {
+  const { id } = req.params;
 
-    const { id } = req.params;
-
-    if (!id) {
-      ResponseErrorHandler(res, 400, "Please provide a valid id")
-    }
-
-    const allMyOrders = await ordersModel.findMyOrders(id);
-
-    if (!allMyOrders) {
-      ResponseErrorHandler(res, 400, "Something went wrong with your request")
-    }
-
-    return res.status(200).json(allMyOrders);
+  if (!id) {
+    responseErrorHandler(res, 400, "Please provide a valid id")
   }
-  return tryCatchHandler(tryFn)
+
+  const allMyOrders = await ordersModel.findMyOrders(id);
+
+  if (!allMyOrders) {
+    responseErrorHandler(res, 404)
+  }
+
+  return res.status(200).json(allMyOrders);
 };
 
 module.exports.getCurrentOrder = async (req, res) => {
 
-  const tryFn = async () => {
+  const { userId, orderId } = req.params;
 
-    const { userId, orderId } = req.params;
+  const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
 
-    const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
-
-    if (!currentOrder) {
-      ResponseErrorHandler(res, 400, "Something went wrong with your request")
-    }
-
-    return res.status(200).json(currentOrder);
-
+  if (!currentOrder) {
+    responseErrorHandler(res, 404)
   }
-  return tryCatchHandler(tryFn)
+
+  return res.status(200).json(currentOrder);
 };
 
 module.exports.updateOrder = async (req, res) => {
-  
-  const tryFn = async () => {
 
-    const order = mapOrderBody(req.body);
+  const order = mapOrderBody(req.body);
 
-    const updatedOrder = await ordersModel.updateOrderById(order);
+  const updatedOrder = await ordersModel.updateOrderById(order);
 
-    if (!updatedOrder) {
-      ResponseErrorHandler(res, 400, "Something went wrong with your request")
-    }
-
-    return res.status(200).json(updatedOrder);
-
+  if (!updatedOrder) {
+    responseErrorHandler(res, 404)
   }
-  return tryCatchHandler(tryFn)
+
+  return res.status(200).json(updatedOrder);
 };
