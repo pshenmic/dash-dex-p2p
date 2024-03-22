@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 require('express-async-errors')
+const session = require('express-session');
 const helmet = require("helmet");
 const cors = require("cors");
 
@@ -11,6 +12,20 @@ const usersRoutes = require("./users/usersRoutes");
 const offersRoutes = require("./offers/offersRoutes");
 const ordersRouters = require("./orders/ordersRoutes");
 const chatRouters = require("./chat/chatRoutes");
+
+const secret = process.env.SESSION_SECRET || "default";
+
+// Use express-session middleware
+server.use(session({
+  secret: secret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    secure: false, 
+    httpOnly: true,
+  },
+}));
 
 server.use(helmet());
 server.use(cors());

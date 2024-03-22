@@ -67,8 +67,31 @@ module.exports.getCurrentOrder = async (req, res) => {
 };
 
 module.exports.updateOrder = async (req, res) => {
+  const {
+    bchAmount,
+    fiatAmount,
+    isMakerBuying,
+    makerId,
+    offerId,
+    priceBCH,
+    takerId,
+    cancelled,
+    complete,
+    id,
+  } = req.body
 
-  const order = mapOrderBody(req.body);
+  const order = {
+    maker_id: makerId,
+    taker_id: takerId,
+    offer_id: offerId,
+    price_bch: priceBCH,
+    bch_amount: bchAmount,
+    fiat_amount: fiatAmount,
+    is_maker_buying: isMakerBuying,
+    cancelled,
+    complete,
+    id,
+  }
 
   const updatedOrder = await ordersModel.updateOrderById(order);
 

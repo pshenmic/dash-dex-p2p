@@ -1,7 +1,7 @@
 const offersModel = require("./offersModel.js");
-const { updateBody } = require("./offersHelper.js");
 const io = require("../socket.js");
 const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler.js");
+const { offerModel } = require("./offersHelper.js");
 
 module.exports.getOffersByMakerId = async (req, res) => {
 
@@ -31,9 +31,54 @@ module.exports.getOffer = async (req, res) => {
 };
 
 module.exports.createOffer = async (req, res) => {
-    const newOffer = updateBody(req.body);
 
-    const newOfferInfo = await offersModel.saveOffer(newOffer);
+    const newOffer = offerModel.fromJSON(req.body)
+
+    const {
+      buyBCH,
+      city,
+      country,
+      payment_method,
+      currency_type,
+      currency_symbol,
+      dynamic_pricing,
+      margin,
+      margin_above,
+      market_exchange,
+      limit_min,
+      limit_max,
+      headline,
+      trade_terms,
+      open_hours,
+      close_hours,
+      verified_only,
+      maker_id,
+      pause
+    } = newOffer
+
+    const newOfferData = {
+      buyBCH,
+      city,
+      country,
+      payment_method,
+      currency_type,
+      currency_symbol,
+      dynamic_pricing,
+      margin,
+      margin_above,
+      market_exchange,
+      limit_min,
+      limit_max,
+      headline,
+      trade_terms,
+      open_hours,
+      close_hours,
+      verified_only,
+      maker_id,
+      pause
+    }
+
+    const newOfferInfo = await offersModel.saveOffer(newOfferData);
 
     io.getIO().emit("offers", { action: "create", offer: newOfferInfo });
 
@@ -44,16 +89,60 @@ module.exports.updateOffer = async (req, res) => {
 
     const { offerId } = req.params;
 
+    const updatedOffer = offerModel.fromJSON(req.body)
+
+    const {
+      buyBCH,
+      city,
+      country,
+      payment_method,
+      currency_type,
+      currency_symbol,
+      dynamic_pricing,
+      margin,
+      margin_above,
+      market_exchange,
+      limit_min,
+      limit_max,
+      headline,
+      trade_terms,
+      open_hours,
+      close_hours,
+      verified_only,
+      maker_id,
+      pause
+    } = updatedOffer
+
+    const updatedOfferData = {
+      buyBCH,
+      city,
+      country,
+      payment_method,
+      currency_type,
+      currency_symbol,
+      dynamic_pricing,
+      margin,
+      margin_above,
+      market_exchange,
+      limit_min,
+      limit_max,
+      headline,
+      trade_terms,
+      open_hours,
+      close_hours,
+      verified_only,
+      maker_id,
+      pause
+    }
+
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
     if (!isOfferExist) {
       responseErrorHandler(res, 404, "Offer or User not found!")
     }
 
-    const updatedOffer = updateBody(req.body);
-
     const updateComplete = await offersModel.updateOffer(
-      updatedOffer,
+      updatedOfferData,
       offerId
     );
 

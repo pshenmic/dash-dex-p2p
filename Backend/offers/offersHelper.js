@@ -39,8 +39,8 @@ const validateOfferBody = [
 ];
 
 
-const updateBody = (body) => {
-  const {
+class offerModel {
+  constructor({
     buyBCH,
     city,
     country,
@@ -60,31 +60,35 @@ const updateBody = (body) => {
     verifiedOnly,
     makerId,
     pause,
-  } = body;
-  return {
-    buyBCH,
-    city,
-    country,
-    payment_method: paymentMethod,
-    currency_type: currencyType,
-    currency_symbol: currencySymbol,
-    dynamic_pricing: dynamicPricing,
-    margin,
-    margin_above: marginAbove,
-    market_exchange: marketExchange,
-    limit_min: limitMin,
-    limit_max: limitMax,
-    headline,
-    trade_terms: tradeTerms,
-    open_hours: openHours,
-    close_hours: closeHours,
-    verified_only: verifiedOnly,
-    maker_id: makerId,
-    pause,
-  };
-};
+  }) {
+    this.buyBCH = buyBCH;
+    this.city = city;
+    this.country = country;
+    this.payment_method = paymentMethod;
+    this.currency_type = currencyType;
+    this.currency_symbol = currencySymbol;
+    this.dynamic_pricing = dynamicPricing;
+    this.margin = margin;
+    this.margin_above = marginAbove;
+    this.market_exchange = marketExchange;
+    this.limit_min = limitMin;
+    this.limit_max = limitMax;
+    this.headline = headline;
+    this.trade_terms = tradeTerms;
+    this.open_hours = openHours;
+    this.close_hours = closeHours;
+    this.verified_only = verifiedOnly;
+    this.maker_id = makerId;
+    this.pause = pause;
+  }
+
+  static fromJSON(json) {
+    return new Offer(json);
+  }
+  
+}
 
 module.exports = {
   validateOfferBody,
-  updateBody,
+  offerModel
 };

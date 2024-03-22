@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
-const { generateToken } = require("./usersHelper");
 const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler");
 
 module.exports.signup = async (req, res) => {
@@ -23,7 +22,7 @@ module.exports.signup = async (req, res) => {
 
   res.status(201).json({
     message: "User created",
-    token: generateToken(newUser.email, newUser.id),
+    sessionID: req.sessionID,
     user: newUser,
   });
 
@@ -47,8 +46,9 @@ module.exports.login = async (req, res) => {
         sucess: false
       })
     } else {
+      req.session.user = user
       return res.status(200).json({
-        token: generateToken(user.username, user.id),
+        sessionID: req.sessionID,
         userId: user.id,
         username: user.username,
       });
@@ -58,6 +58,7 @@ module.exports.login = async (req, res) => {
   responseErrorHandler(res, 401, "Oops, username or password is incorrect")
 };
 
+// just for auth user testing It will be removed 
 module.exports.checkUser = async (req, res) => {
   return res.status(200).json({
     message: 'success'
