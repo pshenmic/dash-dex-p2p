@@ -1,4 +1,4 @@
-const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler");
+const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler");
 const { findByUsername } = require("../users/usersModels");
 
 

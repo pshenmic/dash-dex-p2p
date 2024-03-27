@@ -1,7 +1,7 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
 const { mapOrderBody } = require("./ordersHelper.js");
-const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler.js");
+const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler.js");
 
 module.exports.createOrder = async (req, res) => {
 

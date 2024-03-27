@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
-const { responseErrorHandler } = require("../errorsHandler/responseErrorHandler");
+const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler");
 
 module.exports.signup = async (req, res) => {
   
