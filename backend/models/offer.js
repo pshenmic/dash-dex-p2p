@@ -1,7 +1,7 @@
 class Offer {
-    constructor({ buyBCH, city, country, paymentMethod, currencyType, currencySymbol, dynamicPricing, margin, marginAbove,
-                    marketExchange, limitMin, limitMax, headline, tradeTerms, openHours, closeHours, verifiedOnly,
-                    makerId, pause }) {
+    constructor(buyBCH, city, country, paymentMethod, currencyType, currencySymbol, dynamicPricing, margin, marginAbove,
+                marketExchange, limitMin, limitMax, headline, tradeTerms, openHours, closeHours, verifiedOnly,
+                makerId, pause) {
         this.buyBCH = buyBCH;
         this.city = city;
         this.country = country;
@@ -25,7 +25,7 @@ class Offer {
 
     toRow() {
         return {
-            buyBCH: this.buyBCH ?? null,
+            buy_bch: this.buyBCH ?? null,
             city: this.city ?? null,
             country: this.country ?? null,
             payment_method: this.paymentMethod ?? null,
@@ -42,13 +42,28 @@ class Offer {
             open_hours: this.openHours ?? null,
             close_hours: this.closeHours ?? null,
             verified_only: this.verifiedOnly ?? null,
-            maker_id: this.makerId,
-            pause: this.pause
+            maker_id: this.makerId, pause: this.pause
         }
     }
 
-    static fromJSON(json) {
-        return new Offer(json);
+    static fromRow({
+                       buy_bch, city, country, payment_method, currency_type, currency_symbol, dynamic_pricing,
+                       margin, margin_above, market_exchange, limit_min, limit_max, headline, trade_terms,
+                       open_hours, close_hours, verified_only, maker_id, pause
+                   }) {
+        return new Offer(buy_bch, city, country, payment_method, currency_type, currency_symbol, dynamic_pricing,
+            margin, margin_above, market_exchange, limit_min, limit_max, headline, trade_terms,
+            open_hours, close_hours, verified_only, maker_id, pause
+        );
+    }
+
+    static fromJSON({ buyBCH, city, country, paymentMethod, currencyType, currencySymbol, dynamicPricing, margin,
+                        marginAbove, marketExchange, limitMin, limitMax, headline, tradeTerms,
+                        openHours, closeHours, verifiedOnly, makerId, pause
+                    }) {
+        return new Offer(buyBCH, city, country, paymentMethod, currencyType, currencySymbol, dynamicPricing, margin,
+            marginAbove, marketExchange, limitMin, limitMax, headline, tradeTerms,
+            openHours, closeHours, verifiedOnly, makerId, pause);
     }
 
 }
