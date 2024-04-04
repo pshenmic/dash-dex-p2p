@@ -1,7 +1,7 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
-const { mapOrderBody } = require("./ordersHelper.js");
 const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler.js");
+const NotFoundError = require("../errors/not.found.error");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -9,31 +9,37 @@ module.exports.createOrder = async (req, res) => {
 
   let transaction;
 
-  transaction = await db.transaction();
-  
-  const savedOrder = await ordersModel.saveOrder(order, transaction);
+  try {
+    transaction = await db.transaction();
 
-  if (!savedOrder) {
+    const savedOrder = await ordersModel.saveOrder(order, transaction);
+
+    if (!savedOrder) {
+      await transaction.rollback();
+      throw new NotFoundError()
+    }
+
+    const messageBody = {
+      order_id: savedOrder.id,
+      text: initial_message,
+      author_id: savedOrder.taker_id,
+    };
+
+    const newMessage = await chatModel.saveMessage(messageBody, transaction);
+
+    if (!newMessage) {
+      await transaction.rollback();
+      return responseErrorHandler(res, 404, "Message not found");
+    }
+
+    await transaction.commit();
+
+    return res.status(201).json(savedOrder);
+  } catch (e) {
     await transaction.rollback();
-    return responseErrorHandler(res, 404, "Order not found");
+
+    throw new Error("Could not save order")
   }
-
-  const messageBody = {
-    order_id: savedOrder.id,
-    text: initial_message,
-    author_id: savedOrder.taker_id,
-  };
-
-  const newMessage = await chatModel.saveMessage(messageBody, transaction);
-
-  if (!newMessage) {
-    await transaction.rollback();
-    return responseErrorHandler(res, 404, "Message not found");
-  }
-
-  await transaction.commit();
-
-  return res.status(201).json(savedOrder);
 };
 
 module.exports.getMyOrders = async (req, res) => {
