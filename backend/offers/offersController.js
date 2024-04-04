@@ -31,54 +31,9 @@ module.exports.getOffer = async (req, res) => {
 };
 
 module.exports.createOffer = async (req, res) => {
-
     const newOffer = offerModel.fromJSON(req.body)
 
-    const {
-      buyBCH,
-      city,
-      country,
-      payment_method,
-      currency_type,
-      currency_symbol,
-      dynamic_pricing,
-      margin,
-      margin_above,
-      market_exchange,
-      limit_min,
-      limit_max,
-      headline,
-      trade_terms,
-      open_hours,
-      close_hours,
-      verified_only,
-      maker_id,
-      pause
-    } = newOffer
-
-    const newOfferData = {
-      buyBCH,
-      city,
-      country,
-      payment_method,
-      currency_type,
-      currency_symbol,
-      dynamic_pricing,
-      margin,
-      margin_above,
-      market_exchange,
-      limit_min,
-      limit_max,
-      headline,
-      trade_terms,
-      open_hours,
-      close_hours,
-      verified_only,
-      maker_id,
-      pause
-    }
-
-    const newOfferInfo = await offersModel.saveOffer(newOfferData);
+    const newOfferInfo = await offersModel.saveOffer(newOffer);
 
     io.getIO().emit("offers", { action: "create", offer: newOfferInfo });
 

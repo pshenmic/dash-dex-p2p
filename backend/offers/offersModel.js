@@ -13,8 +13,15 @@ async function checkOfferExistence(offerId) {
     .select("offers.*", "users.username");
 }
 
-async function saveOffer(newOffer) {
-  const [savedOfferId] = await db("offers").insert(newOffer, ["id"]);
+/**
+ * Saves an offer in the database
+ *
+ * @param offer {Offer}
+ * @return {Promise<?>}
+ */
+async function saveOffer(offer) {
+  const [savedOfferId] = await db("offers").insert(offer.toRow(), ["id"]);
+
   return savedOfferId;
 }
 
