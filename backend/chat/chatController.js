@@ -1,15 +1,16 @@
 const chatModel = require("./chatModel.js");
 const io = require("../socket.js");
 const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler.js");
+const NotFoundError = require("../errors/not.found.error");
 
 module.exports.getAllMessages = async (req, res) => {
 
     const { order_id } = req.params;
-    
+
     const allMyOrders = await chatModel.findAllByOrderId(order_id);
 
     if (!allMyOrders) {
-      return responseErrorHandler(res, 404)
+      throw new NotFoundError()
     }
 
     return res.status(200).json(allMyOrders);
