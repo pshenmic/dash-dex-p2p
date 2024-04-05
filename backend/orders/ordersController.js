@@ -1,6 +1,5 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
-const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler.js");
 const NotFoundError = require("../errors/not.found.error");
 
 module.exports.createOrder = async (req, res) => {

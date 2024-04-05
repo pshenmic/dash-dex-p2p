@@ -1,6 +1,5 @@
 const offersModel = require("./offersModel.js");
 const io = require("../socket.js");
-const { responseErrorHandler } = require("../errorHandler/responseErrorsHandler.js");
 const { offerModel } = require("./offersHelper.js");
 
 module.exports.getOffersByMakerId = async (req, res) => {
