@@ -22,7 +22,7 @@ module.exports.createChat = async (req, res) => {
     const savedMessage = await chatModel.saveMessage(text, author_id, order_id);
 
     if (!savedMessage) {
-      return responseErrorHandler(res, 400, "Something went wrong with your trade request")
+      throw new NotFoundError()
     }
 
     io.getIO().to(req.body.order_id).emit("newMessage", {
@@ -30,5 +30,5 @@ module.exports.createChat = async (req, res) => {
       message: savedMessage,
     });
 
-    return responseErrorHandler(res, 201, "Successfully created new message")
+    return res.status(201).json({msg:"Successfully created new message"});
 };

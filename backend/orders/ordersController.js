@@ -28,7 +28,7 @@ module.exports.createOrder = async (req, res) => {
 
     if (!newMessage) {
       await transaction.rollback();
-      return responseErrorHandler(res, 404, "Message not found");
+      throw new NotFoundError()
     }
 
     await transaction.commit();
@@ -46,13 +46,13 @@ module.exports.getMyOrders = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    responseErrorHandler(res, 400, "Please provide a valid id")
+    throw new NotFoundError()
   }
 
   const allMyOrders = await ordersModel.findMyOrders(id);
 
   if (!allMyOrders) {
-    responseErrorHandler(res, 404)
+    throw new NotFoundError()
   }
 
   return res.status(200).json(allMyOrders);
@@ -65,7 +65,7 @@ module.exports.getCurrentOrder = async (req, res) => {
   const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
 
   if (!currentOrder) {
-    responseErrorHandler(res, 404)
+    throw new NotFoundError()
   }
 
   return res.status(200).json(currentOrder);
@@ -101,7 +101,7 @@ module.exports.updateOrder = async (req, res) => {
   const updatedOrder = await ordersModel.updateOrderById(order);
 
   if (!updatedOrder) {
-    responseErrorHandler(res, 404)
+    throw new NotFoundError()
   }
 
   return res.status(200).json(updatedOrder);

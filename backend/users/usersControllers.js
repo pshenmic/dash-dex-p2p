@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
+const NotFoundError = require("../errors/not.found.error");
 
 module.exports.signup = async (req, res) => {
   
@@ -8,7 +9,7 @@ module.exports.signup = async (req, res) => {
   const existingUser = await User.findExistingUser(username,email);
 
   if (existingUser.length !== 0) {
-    return responseErrorHandler(res, 409, "User with provided email or username already exists");
+    throw new NotFoundError()
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -32,7 +33,7 @@ module.exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    responseErrorHandler(res, 400, "Oops, username and password is required for login.")
+    throw new NotFoundError()
   }
 
   const user = await User.findBy({ username });
@@ -53,8 +54,7 @@ module.exports.login = async (req, res) => {
       });
     }
   }
-
-  responseErrorHandler(res, 401, "Oops, username or password is incorrect")
+  throw new NotFoundError()
 };
 
 // just for auth user testing It will be removed 
