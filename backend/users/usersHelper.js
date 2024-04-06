@@ -1,4 +1,5 @@
 const { check, validationResult } = require("express-validator");
+const User = require("../models/user");
 
 const validateUser = [
   check("email")
@@ -36,5 +37,6 @@ const validateUser = [
 ];
 
 module.exports = {
-  validateUser
+  validateUser,
+  userModel:User
 };

@@ -1,6 +1,7 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
 const NotFoundError = require("../errors/not.found.error");
+const { orderModel } = require("./ordersHelper.js");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -72,31 +73,8 @@ module.exports.getCurrentOrder = async (req, res) => {
 };
 
 module.exports.updateOrder = async (req, res) => {
-  const {
-    bchAmount,
-    fiatAmount,
-    isMakerBuying,
-    makerId,
-    offerId,
-    priceBCH,
-    takerId,
-    cancelled,
-    complete,
-    id,
-  } = req.body
 
-  const order = {
-    maker_id: makerId,
-    taker_id: takerId,
-    offer_id: offerId,
-    price_bch: priceBCH,
-    bch_amount: bchAmount,
-    fiat_amount: fiatAmount,
-    is_maker_buying: isMakerBuying,
-    cancelled,
-    complete,
-    id,
-  }
+  const order = orderModel.fromJSON(req.body)
 
   const updatedOrder = await ordersModel.updateOrderById(order);
 

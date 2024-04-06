@@ -46,50 +46,6 @@ module.exports.updateOffer = async (req, res) => {
 
     const updatedOffer = offerModel.fromJSON(req.body)
 
-    const {
-      buyBCH,
-      city,
-      country,
-      payment_method,
-      currency_type,
-      currency_symbol,
-      dynamic_pricing,
-      margin,
-      margin_above,
-      market_exchange,
-      limit_min,
-      limit_max,
-      headline,
-      trade_terms,
-      open_hours,
-      close_hours,
-      verified_only,
-      maker_id,
-      pause
-    } = updatedOffer
-
-    const updatedOfferData = {
-      buyBCH,
-      city,
-      country,
-      payment_method,
-      currency_type,
-      currency_symbol,
-      dynamic_pricing,
-      margin,
-      margin_above,
-      market_exchange,
-      limit_min,
-      limit_max,
-      headline,
-      trade_terms,
-      open_hours,
-      close_hours,
-      verified_only,
-      maker_id,
-      pause
-    }
-
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
     if (!isOfferExist) {
@@ -97,7 +53,7 @@ module.exports.updateOffer = async (req, res) => {
     }
 
     const updateComplete = await offersModel.updateOffer(
-      updatedOfferData,
+      updatedOffer,
       offerId
     );
 

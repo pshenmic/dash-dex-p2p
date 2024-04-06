@@ -17,7 +17,7 @@ module.exports.getAllMessages = async (req, res) => {
 
 module.exports.createChat = async (req, res) => {
 
-    const {text, author_id, order_id} = req.body
+    const {text, author_id, order_id} = chatModel.chatingModel.fromJSON(req.body)
 
     const savedMessage = await chatModel.saveMessage(text, author_id, order_id);
 

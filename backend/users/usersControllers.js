@@ -1,10 +1,11 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
 const NotFoundError = require("../errors/not.found.error");
+const { userModel } = require("./usersHelper");
 
 module.exports.signup = async (req, res) => {
   
-  const { email, username, password } = req.body;
+  const { email, username, password } = userModel.fromJSON(req.body);
 
   const existingUser = await User.findExistingUser(username,email);
 
@@ -30,7 +31,7 @@ module.exports.signup = async (req, res) => {
 
 module.exports.login = async (req, res) => {
 
-  const { username, password } = req.body;
+  const { username, password } = userModel.fromJSON(req.body);
 
   if (!username || !password) {
     throw new NotFoundError()
