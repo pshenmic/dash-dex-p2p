@@ -39,7 +39,7 @@ async function fetchAllOffers() {
 async function updateOffer(updateOffer, offerId) {
   const [updatedOfferId] = await db("offers")
     .where({ id: offerId})
-    .update(updateOffer, ["id"]);
+    .update(updateOffer.toRow(), ["id"]);
   return findById(updatedOfferId);
 }
 
