@@ -52,7 +52,7 @@ async function updateOrderById(order) {
       .where({id: order.id})
       .update(order.toRow(), ['buy_dash', 'city', 'country', 'payment_method', 'currency_type', 'currency_symbol',
         'dynamic_pricing', 'margin', 'margin_above', 'market_exchange', 'limit_min', 'limit_max',
-        'headline', 'trade_terms', 'open_hours', 'close_hours', 'verified_only', 'maker_id', 'pause']);
+        'headline', 'trade_terms', 'open_hours', 'close_hours', 'trusted_only', 'maker_id', 'pause']);
 
   return findById(updatedOrder.id);
 }

@@ -10,7 +10,7 @@ const createFakeOffers = (value) => {
     dynamic_pricing: true,
     margin: parseInt(Math.random() * 10) + 1,
     margin_above: faker.random.boolean(),
-    verified_only: faker.random.boolean(),
+    trusted_only: faker.random.boolean(),
     maker_id: value,
     market_exchange: "Coinbase",
     headline: faker.lorem.words(),

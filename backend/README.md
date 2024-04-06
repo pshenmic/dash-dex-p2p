@@ -151,7 +151,7 @@ _HTTP method:_**[POST]**
 | tradeTerms      | string    | Yes          | Can be an empty field    |
 | openHours       | time      | No           | Can be an empty field    |
 | closeHours      | time      | No           | Can be an empty field    |
-| verifiedOnly    | boolean   | Yes          | Cannot be an empty field |
+| trustedOnly    | boolean   | Yes          | Cannot be an empty field |
 | pause           | boolean   | No           | Can be an empty field    |
 | makerId         | integer   | Yes          | Cannot be an empty field |
 | created_at      | timestamp |              |                          |
@@ -173,7 +173,7 @@ _HTTP method:_**[POST]**
     "limitMax": 250,
     "headline": "Best Deal in Town",
     "tradeTerms": "lorem ipsum at Starbucks",
-    "verifiedOnly": true,
+    "trustedOnly": true,
     "makerId": 3,
     "pause": false
 
@@ -214,7 +214,7 @@ _HTTP method:_**[PUT]**
 | tradeTerms      | string    | Yes          | Can be an empty field    |
 | openHours       | time      | No           | Can be an empty field    |
 | closeHours      | time      | No           | Can be an empty field    |
-| verifiedOnly    | boolean   | Yes          | Cannot be an empty field |
+| trustedOnly    | boolean   | Yes          | Cannot be an empty field |
 | pause           | boolean   | No           | Can be an empty field    |
 | makerId         | integer   | Yes          | Cannot be an empty field |
 | created_at      | timestamp |              |                          |
@@ -238,7 +238,7 @@ _HTTP method:_**[PUT]**
     "limitMax": 250,
     "headline": "Best Deal in Town",
     "tradeTerms": "lorem ipsum at Starbucks",
-    "verifiedOnly": true,
+    "trustedOnly": true,
     "makerId": 3
 }
 ```

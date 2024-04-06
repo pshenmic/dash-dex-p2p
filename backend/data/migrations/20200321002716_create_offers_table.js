@@ -17,7 +17,7 @@ module.exports.up = function (knex) {
     offers.string("trade_terms", 1000);
     offers.time("open_hours");
     offers.time("close_hours");
-    offers.boolean("verified_only").notNullable();
+    offers.boolean("trusted_only").notNullable();
     offers.boolean("pause").defaultTo(false);
     offers
       .integer("maker_id")
