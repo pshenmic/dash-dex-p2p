@@ -1,12 +1,12 @@
 class Order {
-    constructor(bchAmount, fiatAmount, isMakerBuying, makerId, offerId,
-        priceBCH, takerId, cancelled, complete, id) {
-        this.bchAmount = bchAmount;
+    constructor(dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
+        priceDASH, takerId, cancelled, complete, id) {
+        this.dashAmount = dashAmount;
         this.fiatAmount = fiatAmount;
         this.isMakerBuying = isMakerBuying;
         this.makerId = makerId;
         this.offerId = offerId;
-        this.priceBCH = priceBCH;
+        this.priceDASH = priceDASH;
         this.takerId = takerId;
         this.cancelled = cancelled;
         this.complete = complete;
@@ -16,12 +16,12 @@ class Order {
 
     toRow() {
         return {
-            bch_amount: this.bchAmount ?? null,
+            dash_amount: this.dashAmount ?? null,
             fiat_amount: this.fiatAmount ?? null,
             is_maker_buying: this.isMakerBuying ?? null,
             maker_id: this.makerId ?? null,
             offer_id: this.offerId ?? null,
-            price_bch: this.priceBCH ?? null,
+            price_dash: this.priceDASH ?? null,
             taker_id: this.dynamicPricing ?? null,
             cancelled: this.cancelled ?? null,
             complete: this.complete ?? null,
@@ -29,20 +29,20 @@ class Order {
         }
     }
 
-    static fromRow({ bch_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
-        price_bch, taker_id, cancelled, complete, id
+    static fromRow({ dash_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
+        price_dash, taker_id, cancelled, complete, id
     }) {
         return new Order(
-            bch_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
-            price_bch, taker_id, cancelled, complete, id
+            dash_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
+            price_dash, taker_id, cancelled, complete, id
         );
     }
 
-    static fromJSON({ bchAmount, fiatAmount, isMakerBuying, makerId, offerId,
-        priceBCH, takerId, cancelled, complete, id
+    static fromJSON({ dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
+        priceDASH, takerId, cancelled, complete, id
     }) {
-        return new Order(bchAmount, fiatAmount, isMakerBuying, makerId, offerId,
-            priceBCH, takerId, cancelled, complete, id);
+        return new Order(dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
+            priceDASH, takerId, cancelled, complete, id);
     }
 
 }

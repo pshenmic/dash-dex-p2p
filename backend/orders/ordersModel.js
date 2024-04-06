@@ -50,7 +50,7 @@ function findOrderIdUserId(userId, orderId) {
 async function updateOrderById(order) {
   const [updatedOrder] = await db("orders")
       .where({id: order.id})
-      .update(order.toRow(), ['buy_bch', 'city', 'country', 'payment_method', 'currency_type', 'currency_symbol',
+      .update(order.toRow(), ['buy_dash', 'city', 'country', 'payment_method', 'currency_type', 'currency_symbol',
         'dynamic_pricing', 'margin', 'margin_above', 'market_exchange', 'limit_min', 'limit_max',
         'headline', 'trade_terms', 'open_hours', 'close_hours', 'verified_only', 'maker_id', 'pause']);
 

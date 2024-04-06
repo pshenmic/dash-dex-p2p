@@ -1,7 +1,7 @@
 const faker = require("faker");
 const createFakeOffers = (value) => {
   return {
-    buyBCH: faker.random.boolean(),
+    buyDASH: faker.random.boolean(),
     country: faker.address.country(),
     city: faker.address.city(),
     payment_method: "Cash in person",

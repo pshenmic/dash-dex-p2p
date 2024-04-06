@@ -330,13 +330,13 @@ _HTTP method:_**[POST]**
 
 | **name**        | **type**  | **required** | **description**          |
 | --------------- | --------- | ------------ | ------------------------ |
-| bch_amount      | string    | Yes          | Cannot be an empty field |
+| dash_amount      | string    | Yes          | Cannot be an empty field |
 | fiat_amount     | string    | Yes          | Cannot be an empty field |
 | is_maker_buying | boolean   | Yes          | Cannot be an empty field |
 | maker_id        | integer   | Yes          | Cannot be an empty field |
 | offer_id        | integer   | Yes          | Cannot be an empty field |
 | taker_id        | integer   | Yes          | Cannot be an empty field |
-| price_bch       | string    | Yes          | Can be an empty field    |
+| price_dash       | string    | Yes          | Can be an empty field    |
 | complete        | boolean   | No           | Cannot be an empty field |
 | cancelled       | boolean   | No           | Cannot be an empty field |
 | created_at      | timestamp |              |                          |
@@ -345,12 +345,12 @@ _HTTP method:_**[POST]**
 ```
 {
     "order": {
-        "bch_amount": "1",
+        "dash_amount": "1",
         "fiat_amount": "300",
         "is_maker_buying": true,
         "maker_id": {{userId}},
         "offer_id": {{offerIdSecond}},
-        "price_bch": "300",
+        "price_dash": "300",
         "taker_id": 2
     },
     "initial_message": "Hello There!"
@@ -419,7 +419,7 @@ _HTTP method:_**[PUT]**
     "isMakerBuying": true,
     "makerId": {{userId}},
     "offerId": {{offerIdSecond}},
-    "priceBCH": "300",
+    "priceDASH": "300",
     "takerId": 2,
     "complete": true,
     "id": {{orderId}}

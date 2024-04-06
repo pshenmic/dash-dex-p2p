@@ -6,8 +6,8 @@ const createFakeOrders = (value) => {
     maker_id: value,
     taker_id: 21,
     offer_id: value,
-    price_bch: "250",
-    bch_amount: "2",
+    price_dash: "250",
+    dash_amount: "2",
     fiat_amount: "500",
     is_maker_buying: boolVal,
   };
