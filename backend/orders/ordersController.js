@@ -2,6 +2,8 @@ const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
 const NotFoundError = require("../errors/not.found.error");
 const { orderModel } = require("./ordersHelper.js");
+const BadRequest = require("../errors/bad.request.error.js");
+const ServerError = require("../errors/server.error.js");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -38,7 +40,7 @@ module.exports.createOrder = async (req, res) => {
   } catch (e) {
     await transaction.rollback();
 
-    throw new Error("Could not save order")
+    throw new ServerError("Could not save order")
   }
 };
 
@@ -47,7 +49,7 @@ module.exports.getMyOrders = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    throw new NotFoundError()
+    throw new BadRequest('Please provide a valid id')
   }
 
   const allMyOrders = await ordersModel.findMyOrders(id);

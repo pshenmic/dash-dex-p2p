@@ -2,6 +2,7 @@ const offersModel = require("./offersModel.js");
 const io = require("../socket.js");
 const { offerModel } = require("./offersHelper.js");
 const NotFoundError = require("../errors/not.found.error.js");
+const InvalidInput = require("../errors/invalid.input.js");
 
 module.exports.getOffersByMakerId = async (req, res) => {
 
@@ -23,7 +24,7 @@ module.exports.getOffer = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      throw new NotFoundError()
+      throw new InvalidInput('Please provide a valid id')
     }
 
     const myOffer = await offersModel.findById(id);
@@ -49,7 +50,7 @@ module.exports.updateOffer = async (req, res) => {
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
     if (!isOfferExist) {
-      throw new NotFoundError()
+      throw new NotFoundError("Offer or User not found!")
     }
 
     const updateComplete = await offersModel.updateOffer(
@@ -58,7 +59,7 @@ module.exports.updateOffer = async (req, res) => {
     );
 
     if (!updateComplete) {
-      throw new NotFoundError()
+      throw new NotFoundError("Not Found!")
     }
 
     io.getIO().emit("offers", { action: "update", offer: updateComplete });
@@ -74,7 +75,7 @@ module.exports.deleteOffer = async (req, res) => {
     const isOfferExist = offersModel.checkOfferExistence(offerId);
 
     if (!isOfferExist) {
-      throw new NotFoundError()
+      throw new NotFoundError("Offer or User not found!")
     }
 
     const result = await offersModel.deleteOfferById(offerId);

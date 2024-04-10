@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
 const NotFoundError = require("../errors/not.found.error");
 const { userModel } = require("./usersHelper");
+const BadRequest = require("../errors/bad.request.error");
+const AlreadyExist = require("../errors/already.exist.error");
 
 module.exports.signup = async (req, res) => {
   
@@ -10,7 +12,7 @@ module.exports.signup = async (req, res) => {
   const existingUser = await User.findExistingUser(username,email);
 
   if (existingUser.length !== 0) {
-    throw new NotFoundError()
+    throw new AlreadyExist("hello90")
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -34,7 +36,7 @@ module.exports.login = async (req, res) => {
   const { username, password } = userModel.fromJSON(req.body);
 
   if (!username || !password) {
-    throw new NotFoundError()
+    throw new BadRequest('Oops, username and password is required for login.')
   }
 
   const user = await User.findBy({ username });
@@ -55,6 +57,7 @@ module.exports.login = async (req, res) => {
       });
     }
   }
+
   throw new NotFoundError()
 };
 
