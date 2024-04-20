@@ -8,27 +8,27 @@ const ServerError = require("../errors/server.error");
 module.exports = ({e, res, next}) => {
 
     if (e instanceof NotFoundError) {
-        return res.status(404).send(e.message)
+        return res.status(e.code).send(e.message)
     }
 
     if (e instanceof ServerError) {
-        return res.status(500).send(e.message)
+        return res.status(e.code).send(e.message)
     }
 
     if (e instanceof BadRequest) {
-        return res.status(400).send(e.message)
+        return res.status(e.code).send(e.message)
     }
 
     if (e instanceof AlreadyExist) {
-        return res.status(409).send("User with provided email or username already exists.")
+        return res.status(e.code).send(e.message)
     }
 
     if (e instanceof InvalidInput) {
-        return res.status(401).send("Oops, username or password is incorrect.")
+        return res.status(e.code).send(e.message)
     }
 
     if (e instanceof ForbiddenRequest) {
-        return res.status(403).send(e.message)
+        return res.status(e.code).send(e.message)
     }
 
     return next()

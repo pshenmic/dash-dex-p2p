@@ -13,7 +13,7 @@ module.exports.signup = async (req, res) => {
   const existingUser = await User.findExistingUser(username,email);
 
   if (existingUser.length !== 0) {
-    throw new AlreadyExist()
+    throw new AlreadyExist("User with provided email or username already exists!")
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
