@@ -1,7 +1,7 @@
 module.exports.up = function (knex) {
   return knex.schema.createTable("offers", (offers) => {
     offers.increments();
-    offers.boolean("buy_dash").notNullable();
+    offers.boolean("is_buy").notNullable();
     offers.string("country").notNullable();
     offers.string("city").notNullable();
     offers.string("payment_method").notNullable();
