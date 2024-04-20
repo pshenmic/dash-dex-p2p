@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
-const NotFoundError = require("../errors/not.found.error");
 const { userModel } = require("./usersHelper");
 const BadRequest = require("../errors/bad.request.error");
 const AlreadyExist = require("../errors/already.exist.error");
