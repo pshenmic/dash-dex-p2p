@@ -16,5 +16,5 @@ async function findAllByOrderId(id) {
 module.exports = {
   findAllByOrderId,
   saveMessage,
-  chatingModel:Chat
+  message:Chat
 };

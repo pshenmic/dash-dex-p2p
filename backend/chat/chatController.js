@@ -18,9 +18,9 @@ module.exports.getAllMessages = async (req, res) => {
 
 module.exports.createChat = async (req, res) => {
 
-    const {text, author_id, order_id} = chatModel.chatingModel.fromJSON(req.body)
+    const message = chatModel.message.fromJSON(req.body)
 
-    const savedMessage = await chatModel.saveMessage(text, author_id, order_id);
+    const savedMessage = await chatModel.saveMessage(message);
 
     if (!savedMessage) {
       throw new BadRequest("Something went wrong with your trade request.")
