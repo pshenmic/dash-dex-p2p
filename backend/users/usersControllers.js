@@ -1,19 +1,16 @@
 const bcrypt = require("bcryptjs");
 const User = require("./usersModels");
 const { userModel } = require("./usersHelper");
-const BadRequest = require("../errors/bad.request.error");
-const AlreadyExist = require("../errors/already.exist.error");
-const ForbiddenRequest = require("../errors/forbidden.error");
-const ServerError = require("../errors/server.error");
+const CustomError = require("../errors/CustomError");
 
-module.exports.signup = async (req, res) => {
+module.exports.signup = async (req, res, next) => {
   
   const { email, username, password } = userModel.fromJSON(req.body);
 
   const existingUser = await User.findExistingUser(username,email);
 
   if (existingUser.length !== 0) {
-    throw new AlreadyExist("User with provided email or username already exists!")
+    throw new CustomError("User with provided email or username already exists!", 409)
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -37,7 +34,7 @@ module.exports.login = async (req, res) => {
   const { username, password } = userModel.fromJSON(req.body);
 
   if (!username || !password) {
-    throw new BadRequest('Oops, username and password is required for login.')
+    throw new CustomError('Oops, username and password is required for login.', 400)
   }
 
   const user = await User.findBy({ username });
@@ -45,7 +42,7 @@ module.exports.login = async (req, res) => {
   if (user && bcrypt.compare(password, user.password)) {
 
     if (user.isBlocked) {
-     throw new ForbiddenRequest("Your Account has been suspended")
+     throw new CustomError("Your Account has been suspended", 403)
     } else {
       req.session.user = user
       return res.status(200).json({
@@ -56,7 +53,7 @@ module.exports.login = async (req, res) => {
     }
   }
 
-  throw new ServerError("Something went wrong")
+  throw new CustomError("Something went wrong", 400)
 };
 
 // just for auth user testing It will be removed 

@@ -1,9 +1,7 @@
 const ordersModel = require("./ordersModel.js");
 const chatModel = require("../chat/chatModel.js");
-const NotFoundError = require("../errors/not.found.error");
 const { orderModel } = require("./ordersHelper.js");
-const BadRequest = require("../errors/bad.request.error.js");
-const ServerError = require("../errors/server.error.js");
+const CustomError = require("../errors/CustomError.js");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -18,7 +16,7 @@ module.exports.createOrder = async (req, res) => {
 
     if (!savedOrder) {
       await transaction.rollback();
-      throw new NotFoundError("Order not found!")
+      throw new CustomError("Order not found!")
     }
 
     const messageBody = {
@@ -31,7 +29,7 @@ module.exports.createOrder = async (req, res) => {
 
     if (!newMessage) {
       await transaction.rollback();
-      throw new NotFoundError("Message not found!")
+      throw new CustomError("Message not found!", 404)
     }
 
     await transaction.commit();
@@ -40,7 +38,7 @@ module.exports.createOrder = async (req, res) => {
   } catch (e) {
     await transaction.rollback();
 
-    throw new ServerError("Could not save order")
+    throw new CustomError("Could not save order", 500)
   }
 };
 
@@ -49,13 +47,13 @@ module.exports.getMyOrders = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    throw new BadRequest('Please provide a valid id')
+    throw new CustomError('Please provide a valid id', 400)
   }
 
   const allMyOrders = await ordersModel.findMyOrders(id);
 
   if (allMyOrders.length === 0) {
-    throw new NotFoundError("No orders found for the given order_id!");
+    throw new CustomError("No orders found for the given order_id!", 404);
   }
 
   return res.status(200).json(allMyOrders);
@@ -68,7 +66,7 @@ module.exports.getCurrentOrder = async (req, res) => {
   const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
 
   if (!currentOrder) {
-    throw new NotFoundError("No current order found for the given order_id and user_id")
+    throw new CustomError("No current order found for the given order_id and user_id", 404)
   }
 
   return res.status(200).json(currentOrder);
@@ -81,7 +79,7 @@ module.exports.updateOrder = async (req, res) => {
   const updatedOrder = await ordersModel.updateOrderById(order);
 
   if (!updatedOrder) {
-    throw new NotFoundError("Order was not updated")
+    throw new CustomError("Order was not updated", 404)
   }
 
   return res.status(200).json(updatedOrder);
