@@ -34,11 +34,11 @@ module.exports.getOffer = async (req, res) => {
 module.exports.createOffer = async (req, res) => {
     const newOffer = offerModel.fromJSON(req.body)
 
-    const newOfferInfo = await offersModel.saveOffer(newOffer);
+    const newOfferId = await offersModel.saveOffer(newOffer);
 
-    io.getIO().emit("offers", { action: "create", offer: newOfferInfo });
+    io.getIO().emit("offers", { action: "create", offer: newOfferId });
 
-    return res.status(201).json(newOfferInfo);
+    return res.status(201).json(newOfferId);
 };
 
 module.exports.updateOffer = async (req, res) => {
