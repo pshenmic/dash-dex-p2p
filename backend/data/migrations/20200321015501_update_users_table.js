@@ -3,9 +3,9 @@ module.exports.up = function(knex) {
     users.string("blurb", 255);
     users.string("country", 255);
     users.string("city", 255);
-    users.boolean("email_verification").defaultTo(false);
-    users.boolean("phone_verification").defaultTo(false);
-    users.boolean("merchant").defaultTo(false);
+    users.boolean("is_email_verification").defaultTo(false);
+    users.boolean("is_phone_verification").defaultTo(false);
+    users.boolean("is_merchant").defaultTo(false);
   });
 };
 

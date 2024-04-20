@@ -1,8 +1,8 @@
 module.exports.up = function (knex) {
   return knex.schema.createTable("orders", (orders) => {
     orders.increments();
-    orders.boolean("complete").notNullable().defaultTo(false);
-    orders.boolean("cancelled").notNullable().defaultTo(false);
+    orders.boolean("is_complete").notNullable().defaultTo(false);
+    orders.boolean("is_cancelled").notNullable().defaultTo(false);
     orders.boolean("is_maker_buying").notNullable();
     orders
       .integer("maker_id")
