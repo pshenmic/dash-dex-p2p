@@ -22,7 +22,7 @@ module.exports.createChat = async (req, res) => {
 
     const savedMessage = await chatModel.saveMessage(message);
 
-    if (!savedMessage) {
+    if (savedMessage.length === 0) {
       throw new BadRequest("Something went wrong with your trade request.")
     }
 
