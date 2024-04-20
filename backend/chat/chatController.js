@@ -9,8 +9,8 @@ module.exports.getAllMessages = async (req, res) => {
 
     const allMyOrders = await chatModel.findAllByOrderId(order_id);
 
-    if (!allMyOrders) {
-      throw new NotFoundError("Not Found!")
+    if (allMyOrders.length === 0) {
+      throw new NotFoundError("No orders found for the given order_id!");
     }
 
     return res.status(200).json(allMyOrders);

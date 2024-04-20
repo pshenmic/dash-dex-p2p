@@ -54,8 +54,8 @@ module.exports.getMyOrders = async (req, res) => {
 
   const allMyOrders = await ordersModel.findMyOrders(id);
 
-  if (!allMyOrders) {
-    throw new NotFoundError()
+  if (allMyOrders.length === 0) {
+    throw new NotFoundError("No orders found for the given order_id!");
   }
 
   return res.status(200).json(allMyOrders);
