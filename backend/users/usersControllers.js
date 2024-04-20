@@ -4,6 +4,8 @@ const NotFoundError = require("../errors/not.found.error");
 const { userModel } = require("./usersHelper");
 const BadRequest = require("../errors/bad.request.error");
 const AlreadyExist = require("../errors/already.exist.error");
+const ForbiddenRequest = require("../errors/forbidden.error");
+const ServerError = require("../errors/server.error");
 
 module.exports.signup = async (req, res) => {
   
@@ -44,10 +46,7 @@ module.exports.login = async (req, res) => {
   if (user && bcrypt.compare(password, user.password)) {
 
     if (user.isBlocked) {
-      return res.status(403).json({
-        message: "Your Account has been Suspended!",
-        sucess: false
-      })
+     throw new ForbiddenRequest("Your Account has been suspended")
     } else {
       req.session.user = user
       return res.status(200).json({
@@ -58,7 +57,7 @@ module.exports.login = async (req, res) => {
     }
   }
 
-  throw new NotFoundError()
+  throw new ServerError("Something went wrong")
 };
 
 // just for auth user testing It will be removed 

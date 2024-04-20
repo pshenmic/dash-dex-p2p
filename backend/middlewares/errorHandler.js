@@ -1,5 +1,6 @@
 const AlreadyExist = require("../errors/already.exist.error");
 const BadRequest = require("../errors/bad.request.error");
+const ForbiddenRequest = require("../errors/forbidden.error");
 const InvalidInput = require("../errors/invalid.input");
 const NotFoundError = require("../errors/not.found.error");
 const ServerError = require("../errors/server.error");
@@ -24,6 +25,10 @@ module.exports = ({e, res, next}) => {
 
     if (e instanceof InvalidInput) {
         return res.status(401).send("Oops, username or password is incorrect.")
+    }
+
+    if (e instanceof ForbiddenRequest) {
+        return res.status(403).send(e.message)
     }
 
     return next()
