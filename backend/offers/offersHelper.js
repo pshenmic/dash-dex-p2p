@@ -39,7 +39,16 @@ const validateOfferBody = [
   },
 ];
 
+const commonOfferFields = [
+  "id", "buy_dash", "country", "city", "payment_method",
+  "currency_type", "currency_symbol", "dynamic_pricing", "margin",
+  "margin_above", "market_exchange", "limit_min", "limit_max", "headline",
+  "trade_terms", "open_hours", "close_hours", "trusted_only", "pause",
+  "maker_id", "created_at", "updated_at"
+];
+
 module.exports = {
   validateOfferBody,
-  offerModel: Offer
+  offerModel: Offer,
+  commonOfferFields
 };

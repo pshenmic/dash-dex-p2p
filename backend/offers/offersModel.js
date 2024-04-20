@@ -1,16 +1,17 @@
 const db = require("../data/dbConfig");
+const { commonOfferFields } = require("./offersHelper");
 
 function findById(id) {
   return db("offers")
     .where("offers.id", "=", id)
     .join("users", "maker_id", "=", "users.id")
-    .select("offers.*", "users.username");
+    .select(commonOfferFields, "users.username");
 }
 
 async function checkOfferExistence(offerId) {
   return await db("offers")
-    .where({ id: offerId})
-    .select("offers.*", "users.username");
+    .where({ id: offerId })
+    .select(commonOfferFields, "users.username");
 }
 
 /**
@@ -32,19 +33,19 @@ async function fetchMyOffers({ id }) {
 async function fetchAllOffers() {
   return db("offers")
     .join("users", "maker_id", "=", "users.id")
-    .select("offers.*", "users.username")
+    .select( commonOfferFields,"users.username")
     .orderBy("updated_at", "desc");
 }
 
 async function updateOffer(updateOffer, offerId) {
   const [updatedOfferId] = await db("offers")
-    .where({ id: offerId})
+    .where({ id: offerId })
     .update(updateOffer.toRow(), ["id"]);
   return findById(updatedOfferId);
 }
 
 async function deleteOfferById(offerId) {
-  return db("offers").where({ id: offerId}).del();
+  return db("offers").where({ id: offerId }).del();
 }
 
 module.exports = {

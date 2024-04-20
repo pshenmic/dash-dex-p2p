@@ -1,5 +1,6 @@
 const db = require("../data/dbConfig");
 const Order = require("../models/offer");
+const { commonOrdersFields } = require("./ordersHelper");
 
 async function findById(id) {
   const order = await db("orders").where({ id }).first();
@@ -19,7 +20,7 @@ async function saveOrder(newOrder, transaction) {
 function findMyOrders(id) {
   return db("orders")
     .select(
-      "orders.*",
+      commonOrdersFields,
       { usermaker: "u1.username" },
       { usertaker: "u2.username" }
     )
@@ -33,7 +34,7 @@ function findMyOrders(id) {
 function findOrderIdUserId(userId, orderId) {
   return db("orders")
     .select(
-      "orders.*",
+      commonOrdersFields,
       { usermaker: "u1.username" },
       { usertaker: "u2.username" }
     )
