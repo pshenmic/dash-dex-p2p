@@ -93,7 +93,7 @@ dist
 
 # vuepress build output
 .vuepress/dist
-
+../DS_Store
 # Serverless directories
 .serverless/
 
