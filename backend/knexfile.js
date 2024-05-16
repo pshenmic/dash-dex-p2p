@@ -6,7 +6,7 @@ module.exports = {
     connection: {
       database: "dashdex",
       user: "postgres",
-      password: "1234",
+      password: "hahajaja",
       port:5432,
       host:'localhost'
     },
