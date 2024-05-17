@@ -4,9 +4,9 @@ module.exports = {
     // connection: process.env.DATABASE_URL,
     client: "postgres",
     connection: {
-      database: "dash-dex",
+      database: "dashdex",
       user: "postgres",
-      password: "1234",
+      password: "hahajaja",
       port:5432,
       host:'localhost'
     },
