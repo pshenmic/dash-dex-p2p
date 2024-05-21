@@ -1,27 +1,27 @@
-const faker = require("faker");
-const createFakeOffers = (value) => {
-  return {
-    buyDASH: faker.random.boolean(),
-    country: faker.address.country(),
-    city: faker.address.city(),
-    payment_method: "Cash in person",
-    currency_type: faker.finance.currencyCode(),
-    currency_symbol: faker.finance.currencySymbol(),
-    dynamic_pricing: true,
-    margin: parseInt(Math.random() * 10) + 1,
-    margin_above: faker.random.boolean(),
-    trusted_only: faker.random.boolean(),
-    maker_id: value,
-    market_exchange: "Coinbase",
-    headline: faker.lorem.words(),
-    trade_terms: faker.lorem.sentence(),
-  };
-};
-module.exports.seed = function (knex) {
-  let fakeOffers = [];
-  for (let i = 1; i < 21; i++) {
-    fakeOffers.push(createFakeOffers(i));
-  }
-
-  return knex("offers").insert(fakeOffers);
+exports.seed = function (knex) {
+  // Deletes ALL existing entries
+  return knex("offers")
+    .del()
+    .then(function () {
+      // Inserts seed entries
+      return knex("offers").insert([
+        {
+          buy_dash: true, // Use correct column name "buy_dash" instead of "buyDASH"
+          city: "New York",
+          country: "USA",
+          currency_symbol: "$",
+          currency_type: "USD",
+          dynamic_pricing: true,
+          headline: "Buy DASH with USD",
+          maker_id: 1, // Replace with the appropriate maker_id
+          margin: 5,
+          margin_above: true,
+          market_exchange: "Coinbase",
+          payment_method: "Bank Transfer",
+          trade_terms: "Immediate transfer after payment",
+          trusted_only: true,
+        },
+        // Add more seed data entries as needed
+      ]);
+    });
 };

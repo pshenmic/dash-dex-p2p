@@ -5,16 +5,22 @@ const { commonOrdersFields } = require("./ordersHelper");
 async function findById(id) {
   const order = await db("orders").where({ id }).first();
 
-  return Order.fromRow(order)
+  return order
 }
 
 async function saveOrder(newOrder, transaction) {
-  const [savedOrderId] = await db("orders")
-      .insert(newOrder)
-      .transaction(transaction)
-      .returning("id");
+    const [savedOrderId] = await db("orders")
+    .insert(newOrder.toRow())
+    // .transaction(transaction)
+    .returning("id");
 
-  return findById(savedOrderId, transaction);
+return findById(savedOrderId?.id);
+ 
+}
+
+async function fetchAllOffers() {
+  console.log('orders')
+  return db("orders").orderBy("updated_at", "desc");
 }
 
 function findMyOrders(id) {
@@ -64,4 +70,5 @@ module.exports = {
   findMyOrders,
   findOrderIdUserId,
   updateOrderById,
+  fetchAllOffers
 };

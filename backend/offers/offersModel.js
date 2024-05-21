@@ -22,7 +22,6 @@ async function checkOfferExistence(offerId) {
  */
 async function saveOffer(offer) {
   const [savedOfferId] = await db("offers").insert(offer.toRow(), ["id"]);
-
   return savedOfferId;
 }
 
@@ -32,7 +31,7 @@ async function fetchMyOffers({ id }) {
 
 async function fetchAllOffers() {
   return db("offers")
-    .join("users", "maker_id", "=", "users.id")
+    // .join("users", "maker_id", "=", "users.id")
     .select( commonOfferFields,"users.username")
     .orderBy("updated_at", "desc");
 }

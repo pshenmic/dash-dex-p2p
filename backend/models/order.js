@@ -1,50 +1,43 @@
 class Order {
-    constructor(dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
-        priceDASH, takerId, cancelled, complete, id) {
-        this.dashAmount = dashAmount;
-        this.fiatAmount = fiatAmount;
+    constructor(isComplete, status, isMakerBuying, makerId, takerId, offerId, priceDASH, dashAmount, fiatAmount, createdAt, updatedAt) {
+        this.isComplete = isComplete;
+        this.status = status;
         this.isMakerBuying = isMakerBuying;
         this.makerId = makerId;
+        this.takerId = takerId;
         this.offerId = offerId;
         this.priceDASH = priceDASH;
-        this.takerId = takerId;
-        this.cancelled = cancelled;
-        this.complete = complete;
-        this.id = id;
-
+        this.dashAmount = dashAmount;
+        this.fiatAmount = fiatAmount;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     toRow() {
         return {
-            dash_amount: this.dashAmount ?? null,
-            fiat_amount: this.fiatAmount ?? null,
+            is_complete: this.isComplete ?? null,
+            status: this.status ?? null,
             is_maker_buying: this.isMakerBuying ?? null,
             maker_id: this.makerId ?? null,
+            taker_id: this.takerId ?? null,
             offer_id: this.offerId ?? null,
             price_dash: this.priceDASH ?? null,
-            taker_id: this.dynamicPricing ?? null,
-            cancelled: this.cancelled ?? null,
-            complete: this.complete ?? null,
-            id: this.id ?? null,
-        }
+            dash_amount: this.dashAmount ?? null,
+            fiat_amount: this.fiatAmount ?? null,
+            created_at: this.createdAt ?? null,
+            updated_at: this.updatedAt ?? null,
+        };
     }
 
-    static fromRow({ dash_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
-        price_dash, taker_id, cancelled, complete, id
-    }) {
+    static fromRow({ is_complete, status, is_maker_buying, maker_id, taker_id, offer_id, price_dash, dash_amount, fiat_amount, created_at, updated_at }) {
         return new Order(
-            dash_amount, fiat_amount, is_maker_buying, maker_id, offer_id,
-            price_dash, taker_id, cancelled, complete, id
+            is_complete, status, is_maker_buying, maker_id, taker_id, offer_id, price_dash, dash_amount, fiat_amount, created_at, updated_at
         );
     }
 
-    static fromJSON({ dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
-        priceDASH, takerId, cancelled, complete, id
-    }) {
-        return new Order(dashAmount, fiatAmount, isMakerBuying, makerId, offerId,
-            priceDASH, takerId, cancelled, complete, id);
+    static fromJSON({ isComplete, status, isMakerBuying, makerId, takerId, offerId, priceDASH, dashAmount, fiatAmount, createdAt, updatedAt }) {
+        return new Order(isComplete, status, isMakerBuying, makerId, takerId, offerId, priceDASH, dashAmount, fiatAmount, createdAt, updatedAt);
     }
-
 }
 
-module.exports = Order
+module.exports = Order;

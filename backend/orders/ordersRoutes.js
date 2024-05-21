@@ -5,8 +5,10 @@ const runAsyncWrapper = require("../middlewares/runAsyncWrapper");
 
 const router = express.Router();
 
-router.post("/create-order", checkLoggedIn, runAsyncWrapper(ordersController.createOrder));
-router.get("/:id([0-9]+)", checkLoggedIn, runAsyncWrapper(ordersController.getMyOrders));
+router.post("/create-order", ordersController.createOrder);
+router.get("/orders", ordersController.getAllOrders);
+
+router.get("/:id([0-9]+)",  runAsyncWrapper(ordersController.getMyOrders));
 router.get(
   "/:userId([0-9]+)/:orderId([0-9]+)",
   checkLoggedIn,
