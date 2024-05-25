@@ -73,9 +73,9 @@ module.exports.deleteOffer = async (req, res) => {
 
     const { offerId } = req.params;
 
-    const isOfferExist = offersModel.checkOfferExistence(offerId);
+    const isOfferExist = await offersModel.checkOfferExistence(offerId);
 
-    if (!isOfferExist) {
+    if (isOfferExist.length === 0) {
       throw new NotFoundError("Offer or User not found!")
     }
     
@@ -99,16 +99,16 @@ module.exports.pauseOffer = async (req, res) => {
 
   const { offerId } = req.params;
 
-  const isOfferExist = offersModel.checkOfferExistence(offerId);
-  let pauseValue = false
-  isOfferExist.then(offer => pauseValue = offer[0].pause)
+  const isOfferExist = await offersModel.checkOfferExistence(offerId);
 
-  if (!isOfferExist) {
+  if (isOfferExist?.length === 0) {
     throw new NotFoundError("Offer or User not found!")
   }
-  
+
+  let pauseValue = isOfferExist[0].pause
   const isOrderLinkedWithit = ordersModel.findOrderByOfferId(offerId)
   isOrderLinkedWithit.then( async (orders) => {
+    console.log(orders)
     if(orders?.length === 0) {
 
       const updateComplete = await offersModel.pauseTheOffer(offerId, pauseValue);
