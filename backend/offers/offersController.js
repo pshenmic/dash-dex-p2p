@@ -1,4 +1,6 @@
 const offersModel = require("./offersModel.js");
+const ordersModel = require("../orders/ordersModel.js");
+
 const io = require("../socket.js");
 const { offerModel } = require("./offersHelper.js");
 const NotFoundError = require("../errors/not.found.error.js");
@@ -76,10 +78,51 @@ module.exports.deleteOffer = async (req, res) => {
     if (!isOfferExist) {
       throw new NotFoundError("Offer or User not found!")
     }
+    
+    const isOrderLinkedWithit = ordersModel.findOrderByOfferId(offerId)
+    isOrderLinkedWithit.then( async (orders) => {
+      if(orders?.length === 0) {
 
-    const result = await offersModel.deleteOfferById(offerId);
+        const result = await offersModel.deleteOfferById(offerId);
 
-    io.getIO().emit("offers", { action: "delete", id: result });
+        io.getIO().emit("offers", { action: "delete", id: result });
+    
+        return res.status(200).json({message:"offer deleted successfully!"});
+      } else {
+        return res.status(200).json({message:"Offer can't be deleted in current state"});
+      }
+    })
 
-    return res.status(200).json(result);
+};
+
+module.exports.pauseOffer = async (req, res) => {
+
+  const { offerId } = req.params;
+
+  const isOfferExist = offersModel.checkOfferExistence(offerId);
+  let pauseValue = false
+  isOfferExist.then(offer => pauseValue = offer[0].pause)
+
+  if (!isOfferExist) {
+    throw new NotFoundError("Offer or User not found!")
+  }
+  
+  const isOrderLinkedWithit = ordersModel.findOrderByOfferId(offerId)
+  isOrderLinkedWithit.then( async (orders) => {
+    if(orders?.length === 0) {
+
+      const updateComplete = await offersModel.pauseTheOffer(offerId, pauseValue);
+  
+      if (!updateComplete) {
+        throw new NotFoundError("Not Found!")
+      }
+
+      io.getIO().emit("offers", { action: "update", offer: updateComplete });
+
+      return res.status(200).json({message:"offer updated successfully!"});
+    } else {
+      return res.status(200).json({message:"Offer can't be updated in current state"});
+    }
+  })
+
 };

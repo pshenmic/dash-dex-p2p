@@ -66,11 +66,24 @@ module.exports.getAllOrders = async (req, res) => {
   return res.status(200).json(allOffers);
 };
 
-module.exports.getCurrentOrder = async (req, res) => {
+module.exports.getAllCompletedOrders = async (req, res) => {
 
-  const { userId, orderId } = req.params;
+  const {userId} = req.params;
 
-  const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
+  const currentOrder = await ordersModel.findCompletedOrders(userId);
+
+  if (!currentOrder) {
+    throw new NotFoundError("No current order found for the given order_id and user_id")
+  }
+
+  return res.status(200).json(currentOrder);
+};
+
+module.exports.getCurrentOrders = async (req, res) => {
+
+  const { userId } = req.params;
+
+  const currentOrder = await ordersModel.findOrderIdUserId(userId);
 
   if (!currentOrder) {
     throw new NotFoundError("No current order found for the given order_id and user_id")

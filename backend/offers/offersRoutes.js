@@ -6,13 +6,12 @@ const runAsyncWrapper = require("../middlewares/runAsyncWrapper");
 
 const router = express.Router();
 
-router.post(
-  "/",offersController.createOffer
-);
-
-router.get("/offers", runAsyncWrapper(offersController.getAllOffers));
+router.post("/", checkLoggedIn, offersController.createOffer);
+router.get("/offers", checkLoggedIn, runAsyncWrapper(offersController.getAllOffers));
 router.get("/user/:id/offers", checkLoggedIn, runAsyncWrapper(offersController.getOffersByMakerId));
-router.get("/offer/:id([0-9]+)", runAsyncWrapper(offersController.getOffer));
+router.get("/offer/:id([0-9]+)", checkLoggedIn, runAsyncWrapper(offersController.getOffer));
+router.get("/offer/:id([0-9]+)", checkLoggedIn, runAsyncWrapper(offersController.getOffer));
+
 
 router.put(
   "/:userId([0-9]+)/:offerId([0-9]+)",
@@ -21,9 +20,15 @@ router.put(
 );
 
 router.delete(
-  "/:userId([0-9]+)/:offerId([0-9]+)",
-  checkLoggedIn,
+  "/:offerId([0-9]+)",
+  // checkLoggedIn,
   runAsyncWrapper(offersController.deleteOffer)
+);
+
+router.put(
+  "/pause/:offerId([0-9]+)",
+  // checkLoggedIn,
+  runAsyncWrapper(offersController.pauseOffer)
 );
 
 module.exports = router;

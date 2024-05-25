@@ -58,11 +58,3 @@ module.exports.login = async (req, res) => {
 
   throw new ServerError("Something went wrong")
 };
-
-// just for auth user testing It will be removed 
-module.exports.checkUser = async (req, res) => {
-  return res.status(200).json({
-    message: 'success'
-  })
-
-}

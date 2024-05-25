@@ -4,7 +4,7 @@ const { commonOfferFields } = require("./offersHelper");
 function findById(id) {
   return db("offers")
     .where("offers.id", "=", id)
-    .join("users", "maker_id", "=", "users.id")
+    // .join("users", "maker_id", "=", "users.id")
     .select(commonOfferFields, "users.username");
 }
 
@@ -43,6 +43,12 @@ async function updateOffer(updateOffer, offerId) {
   return findById(updatedOfferId);
 }
 
+async function pauseTheOffer(offerId, pauseValue) {
+  return await db("offers")
+    .where({ id: offerId })
+    .update({ pause: !pauseValue }, ["id"]);
+}
+
 async function deleteOfferById(offerId) {
   return db("offers").where({ id: offerId }).del();
 }
@@ -54,5 +60,6 @@ module.exports = {
   fetchAllOffers,
   updateOffer,
   deleteOfferById,
-  checkOfferExistence
+  checkOfferExistence,
+  pauseTheOffer
 };
