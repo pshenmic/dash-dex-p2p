@@ -8,18 +8,16 @@ const ServerError = require("../errors/server.error");
 
 module.exports.signup = async (req, res) => {
   
-  const { email, username, password } = userModel.fromJSON(req.body);
-
-  const existingUser = await User.findExistingUser(username,email);
+  const { username, password } = userModel.fromJSON(req.body);
+  const existingUser = await User.findExistingUser(username);
 
   if (existingUser.length !== 0) {
-    throw new AlreadyExist("User with provided email or username already exists!")
+    throw new AlreadyExist("User with provided username already exists!")
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const newUser = await User.createUser({
-    email,
     username,
     password: hashedPassword
   });

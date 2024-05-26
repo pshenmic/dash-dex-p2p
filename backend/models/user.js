@@ -1,28 +1,26 @@
 class User {
-    constructor(username, password, email) {
+    constructor(username, password) {
         this.username = username;
         this.password = password;
-        this.email = email;
     }
 
     toRow() {
         return {
             username: this.username ?? null,
             password: this.password ?? null,
-            email: this.email ?? null,
         }
     }
 
-    static fromRow({ username, password, email,
+    static fromRow({ username, password,
     }) {
         return new User(
-            username, password, email,
+            username, password,
         );
     }
 
-    static fromJSON({ username, password, email
+    static fromJSON({ username, password
     }) {
-        return new User(username, password, email);
+        return new User(username, password);
     }
 
 }

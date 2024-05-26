@@ -4,7 +4,6 @@ const faker = require("faker");
 const createFakeUser = () => {
   //const hashedPassword = await ;
   return {
-    email: faker.internet.email(),
     username: faker.internet.userName(),
     password: bcrypt.hashSync("Pass1234", 12),
     push_notification: false,
