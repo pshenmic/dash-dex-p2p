@@ -21,11 +21,13 @@ router.put(
 
 router.delete(
   "/:offerId([0-9]+)",
+  checkLoggedIn,
   runAsyncWrapper(offersController.deleteOffer)
 );
 
 router.put(
   "/pause/:offerId([0-9]+)",
+  checkLoggedIn,
   runAsyncWrapper(offersController.pauseOffer)
 );
 
