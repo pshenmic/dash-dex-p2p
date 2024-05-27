@@ -15,7 +15,6 @@ const chatRouters = require("./chat/chatRoutes");
 
 const secret = process.env.SESSION_SECRET || "default";
 
-// Use express-session middleware
 server.use(session({
   secret: secret,
   resave: false,
@@ -38,9 +37,7 @@ server.use("/api/offers", offersRoutes);
 server.use("/api/orders", ordersRouters);
 server.use("/api/chat", chatRouters);
 
-// Define error-handling middleware
 server.use((err, req, res, next) => {
-  // Handle errors here
   res.status(500).send('Something went wrong!');
 });
 

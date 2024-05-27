@@ -19,7 +19,6 @@ async function findOrderByOfferId(id) {
 async function saveOrder(newOrder, transaction) {
     const [savedOrderId] = await db("orders")
     .insert(newOrder.toRow())
-    // .transaction(transaction)
     .returning("id");
 
 return findById(savedOrderId?.id);
@@ -32,11 +31,6 @@ async function fetchAllOffers() {
 
 function findMyOrders(id) {
   return db("orders")
-    // .select(
-    //   commonOrdersFields,
-    //   { usermaker: "u1.username" },
-    //   { usertaker: "u2.username" }
-    // )
     .leftJoin({ u1: "users" }, "orders.maker_id", "=", "u1.id")
     .leftJoin({ u2: "users" }, "orders.taker_id", "=", "u2.id")
     .where(function () {
@@ -46,11 +40,6 @@ function findMyOrders(id) {
 
 function findOrderIdUserId(userId) {
   return db("orders")
-    // .select(
-    //   commonOrdersFields,
-    //   { usermaker: "u1.username" },
-    //   { usertaker: "u2.username" }
-    // )
     .leftJoin({ u1: "users" }, "orders.maker_id", "=", "u1.id")
     .leftJoin({ u2: "users" }, "orders.taker_id", "=", "u2.id")
     .where(function () {

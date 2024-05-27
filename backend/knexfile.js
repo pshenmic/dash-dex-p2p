@@ -1,7 +1,5 @@
-// Update with your config settings.
 module.exports = {
   development: {
-    // connection: process.env.DATABASE_URL,
     client: "postgres",
     connection: {
       database: process.env.DATABASE_NAME,
@@ -14,7 +12,7 @@ module.exports = {
       min: 2,
       max: 10,
     },
-    useNullAsDefault: true, // used to avoid warning on console
+    useNullAsDefault: true,
     migrations: {
       directory: "./data/migrations",
       tableName: "dbmigrations",

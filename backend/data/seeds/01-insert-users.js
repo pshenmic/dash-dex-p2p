@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const faker = require("faker");
 
 const createFakeUser = () => {
-  //const hashedPassword = await ;
   return {
     username: faker.internet.userName(),
     password: bcrypt.hashSync("Pass1234", 12),
@@ -19,7 +18,6 @@ module.exports.seed = function (knex) {
   return knex("users")
     .del()
     .then(function () {
-      // Inserts seed entries
       return knex("users").insert(fakeUsers);
     });
 };

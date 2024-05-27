@@ -4,7 +4,6 @@ const { commonOfferFields } = require("./offersHelper");
 function findById(id) {
   return db("offers")
     .where("offers.id", "=", id)
-    // .join("users", "maker_id", "=", "users.id")
     .select(commonOfferFields, "users.username");
 }
 
@@ -15,7 +14,6 @@ async function checkOfferExistence(offerId) {
 }
 
 /**
- * Saves an offer in the database
  *
  * @param offer {Offer}
  * @return {Promise<?>}
@@ -31,7 +29,6 @@ async function fetchMyOffers({ id }) {
 
 async function fetchAllOffers() {
   return db("offers")
-    // .join("users", "maker_id", "=", "users.id")
     .select( commonOfferFields,"users.username")
     .orderBy("updated_at", "desc");
 }
