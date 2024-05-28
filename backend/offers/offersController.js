@@ -1,5 +1,7 @@
 const offersModel = require("./offersModel.js");
 const ordersModel = require("../orders/ordersModel.js");
+const usersModel = require("../users/usersModels.js");
+
 
 const io = require("../socket.js");
 const { offerModel } = require("./offersHelper.js");
@@ -35,6 +37,12 @@ module.exports.getOffer = async (req, res) => {
 
 module.exports.createOffer = async (req, res) => {
   const newOffer = offerModel.fromJSON(req.body)
+  const checkUser = await usersModel.findById(req?.body?.makerId).then(user => user)
+
+  if(!checkUser) {
+    throw new NotFoundError("Maker id not found")
+  }
+
   const newOfferId = await offersModel.saveOffer(newOffer);
 
   io.getIO().emit("offers", { action: "create", offer: newOfferId });

@@ -15,6 +15,7 @@ const chatRouters = require("./chat/chatRoutes");
 
 const secret = process.env.SESSION_SECRET || "default";
 
+// Use express-session middleware
 server.use(session({
   secret: secret,
   resave: false,

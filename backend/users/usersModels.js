@@ -6,13 +6,12 @@ const findBy = filter => {
     .first();
 };
 
-const findById = id => {
-  return db("users")
+const findById = async id => {
+  return await db("users")
     .where({ id })
     .select(
       "id",
       "username",
-      "push_notification"
     )
     .first();
 };

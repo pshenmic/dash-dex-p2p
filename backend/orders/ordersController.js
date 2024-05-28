@@ -5,6 +5,7 @@ const { orderModel } = require("./ordersHelper.js");
 const BadRequest = require("../errors/bad.request.error.js");
 const ServerError = require("../errors/server.error.js");
 const db = require("../data/dbConfig");
+const usersModel = require("../users/usersModels.js");
 
 module.exports.createOrder = async (req, res) => {
 
@@ -12,6 +13,12 @@ module.exports.createOrder = async (req, res) => {
   let transaction;
 
   try {
+
+    const checkUser = await usersModel.findById(order?.makerId).then(user => user)
+    if(!checkUser) {
+      throw new NotFoundError("Maker id not found")
+    }
+    
     transaction = await db.transaction();
     const new_order = orderModel.fromJSON(order)
     const savedOrder = await ordersModel.saveOrder(new_order, transaction);
