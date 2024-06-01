@@ -39,7 +39,11 @@ module.exports.login = async (req, res) => {
   }
 
   const user = await User.findBy({ username });
+  const isPasswordMatch = await bcrypt.compare(password, user.password).then(res => res)
 
+  if(!isPasswordMatch) {
+    throw new BadRequest('Please enter correct password')
+  }
   if (user && bcrypt.compare(password, user.password)) {
 
     if (user.isBlocked) {

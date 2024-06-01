@@ -7,7 +7,7 @@ const runAsyncWrapper = require("../middlewares/runAsyncWrapper");
 const router = express.Router();
 
 router.post("/", checkLoggedIn, runAsyncWrapper(offersController.createOffer));
-router.get("/offers", checkLoggedIn, runAsyncWrapper(offersController.getAllOffers));
+router.get("/get_all_offers", checkLoggedIn, runAsyncWrapper(offersController.getAllOffers));
 router.get("/user/:id/offers", checkLoggedIn, runAsyncWrapper(offersController.getOffersByMakerId));
 router.get("/offer/:id([0-9]+)", checkLoggedIn, runAsyncWrapper(offersController.getOffer));
 router.get("/offer/:id([0-9]+)", checkLoggedIn, runAsyncWrapper(offersController.getOffer));
