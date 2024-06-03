@@ -1,15 +1,12 @@
 const ForbiddenRequest = require("../errors/forbidden.error");
+const InvalidInput = require("../errors/invalid.input");
 const NotFoundError = require("../errors/not.found.error");
-const ServerError = require("../errors/server.error");
 const { findByUsername } = require("../users/usersModels");
 
 
 module.exports = (req, res, next) => {
-
-  try {
-
     if (!req.session.user) {
-      throw new NotFoundError("User not found")
+      throw new InvalidInput("Unauthorized User")
     }
 
     findByUsername(req.session.user.username).then(users => {
@@ -25,7 +22,4 @@ module.exports = (req, res, next) => {
         throw new NotFoundError("User not found")
       }
     })
-  } catch (err) {
-    throw new ServerError("Could not find user")
-  }
 };

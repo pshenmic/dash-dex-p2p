@@ -12,6 +12,7 @@ const usersRoutes = require("./users/usersRoutes");
 const offersRoutes = require("./offers/offersRoutes");
 const ordersRouters = require("./orders/ordersRoutes");
 const chatRouters = require("./chat/chatRoutes");
+const errorHandler = require("./middlewares/errorHandler");
 
 const secret = process.env.SESSION_SECRET || "default";
 
@@ -39,7 +40,7 @@ server.use("/api/orders", ordersRouters);
 server.use("/api/chat", chatRouters);
 
 server.use((err, req, res, next) => {
-  res.status(500).send('Something went wrong!');
+  errorHandler(err,res,next)
 });
 
 server.get("/", (req, res) => {
