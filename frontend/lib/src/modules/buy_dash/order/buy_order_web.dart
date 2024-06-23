@@ -223,54 +223,6 @@ class _BuyOrderWebState extends State<BuyOrderWeb> {
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
-                  child: Divider(
-                    color: AppColors.greyText,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Finish Order",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 260.w,
-                      height: 35,
-                      child: const SecondaryTextField(
-                        hintText: "Enter amount",
-                        // dense: true,
-                        contentPadding: EdgeInsets.only(bottom: 11),
-                        textAlignment: TextAlign.center,
-                        inputType: TextInputType.number,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30.w,
-                    ),
-                    AppButton(
-                      onPressed: () {},
-                      text: "Buy",
-                      fontWeight: FontWeight.bold,
-                      radius: 5,
-                      width: 110.w,
-                      textSize: 12,
-                      height: 35,
-                    ),
-                  ],
-                ),
-                const SizedBox(
                   height: 25,
                 ),
                 const SizedBox(child: Divider()),

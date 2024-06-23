@@ -1,6 +1,7 @@
 import 'package:dash_money/src/app_utils/colors.dart';
 import 'package:dash_money/src/app_utils/images.dart';
 import 'package:dash_money/src/modules/authentication/login/login.dart';
+import 'package:dash_money/src/modules/buy_dash/offer_detail/offer_details.dart';
 import 'package:dash_money/src/modules/profile/profile/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,22 @@ class MyAppBar extends AppBar {
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            SvgPicture.asset(
-              AppImages.bellIcon,
-              fit: BoxFit.contain,
-              width: 25.sp,
+             TextButton(
+              onPressed: () {
+                Get.to(() => const OrderOverview());
+              },
+              style: ButtonStyle(
+                padding:
+                    MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+              ),
+              child: Text(
+                "Create Offer",
+                style: TextStyle(
+                    fontSize: deviceType == "mobile" ? 14 : 20.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Montserrat",
+                    color: Colors.white),
+              ),
             ),
             SizedBox(width: 27.w),
             TextButton(

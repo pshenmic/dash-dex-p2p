@@ -208,47 +208,6 @@ class _BuyOrderMobileState extends State<BuyOrderMobile> {
           const SizedBox(
             height: 20,
           ),
-          const Divider(
-            color: AppColors.greyText,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const Text(
-            "Finish Order",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 180,
-                child: SecondaryTextField(
-                  hintText: "Enter amount",
-                  textAlignment: TextAlign.center,
-                  inputType: TextInputType.number,
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              AppButton(
-                onPressed: () {},
-                text: "Buy",
-                fontWeight: FontWeight.bold,
-                radius: 5,
-                height: 34,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
           const Divider(),
           const SizedBox(
             height: 15,
