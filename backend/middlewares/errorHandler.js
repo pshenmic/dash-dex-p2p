@@ -5,7 +5,7 @@ const InvalidInput = require("../errors/invalid.input");
 const NotFoundError = require("../errors/not.found.error");
 const ServerError = require("../errors/server.error");
 
-module.exports = ({e, res, next}) => {
+module.exports = (e, res, next) => {
 
     if (e instanceof NotFoundError) {
         return res.status(e.code).send(e.message)

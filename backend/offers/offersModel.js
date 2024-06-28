@@ -4,7 +4,6 @@ const { commonOfferFields } = require("./offersHelper");
 function findById(id) {
   return db("offers")
     .where("offers.id", "=", id)
-    .join("users", "maker_id", "=", "users.id")
     .select(commonOfferFields, "users.username");
 }
 
@@ -15,14 +14,12 @@ async function checkOfferExistence(offerId) {
 }
 
 /**
- * Saves an offer in the database
  *
  * @param offer {Offer}
  * @return {Promise<?>}
  */
 async function saveOffer(offer) {
   const [savedOfferId] = await db("offers").insert(offer.toRow(), ["id"]);
-
   return savedOfferId;
 }
 
@@ -32,7 +29,6 @@ async function fetchMyOffers({ id }) {
 
 async function fetchAllOffers() {
   return db("offers")
-    .join("users", "maker_id", "=", "users.id")
     .select( commonOfferFields,"users.username")
     .orderBy("updated_at", "desc");
 }
@@ -42,6 +38,12 @@ async function updateOffer(updateOffer, offerId) {
     .where({ id: offerId })
     .update(updateOffer.toRow(), ["id"]);
   return findById(updatedOfferId);
+}
+
+async function pauseTheOffer(offerId, pauseValue) {
+  return await db("offers")
+    .where({ id: offerId })
+    .update({ pause: !pauseValue }, ["id"]);
 }
 
 async function deleteOfferById(offerId) {
@@ -55,5 +57,6 @@ module.exports = {
   fetchAllOffers,
   updateOffer,
   deleteOfferById,
-  checkOfferExistence
+  checkOfferExistence,
+  pauseTheOffer
 };

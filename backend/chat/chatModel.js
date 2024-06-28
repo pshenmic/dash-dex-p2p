@@ -2,7 +2,7 @@ const db = require("../data/dbConfig");
 const Chat = require("../models/chat");
 
 async function saveMessage(message) {
-  return db("chat").insert(message, ["text", "message_id", "order_id"]);
+  return db("chat").insert(message.toRow(), ["text", "author_id", "order_id"]);
 }
 
 async function findAllByOrderId(id) {

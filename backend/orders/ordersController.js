@@ -4,17 +4,24 @@ const NotFoundError = require("../errors/not.found.error");
 const { orderModel } = require("./ordersHelper.js");
 const BadRequest = require("../errors/bad.request.error.js");
 const ServerError = require("../errors/server.error.js");
+const db = require("../data/dbConfig");
+const usersModel = require("../users/usersModels.js");
 
 module.exports.createOrder = async (req, res) => {
 
   const { order, initial_message } = req.body;
-
   let transaction;
 
   try {
-    transaction = await db.transaction();
 
-    const savedOrder = await ordersModel.saveOrder(order, transaction);
+    const checkUser = await usersModel.findById(order?.makerId).then(user => user)
+    if(!checkUser) {
+      throw new NotFoundError("Maker id not found")
+    }
+    
+    transaction = await db.transaction();
+    const new_order = orderModel.fromJSON(order)
+    const savedOrder = await ordersModel.saveOrder(new_order, transaction);
 
     if (!savedOrder) {
       await transaction.rollback();
@@ -26,8 +33,8 @@ module.exports.createOrder = async (req, res) => {
       text: initial_message,
       author_id: savedOrder.taker_id,
     };
-
-    const newMessage = await chatModel.saveMessage(messageBody, transaction);
+    
+    const newMessage = await chatModel.saveMessage(chatModel.message.fromJSON(messageBody), transaction);
 
     if (!newMessage) {
       await transaction.rollback();
@@ -61,11 +68,29 @@ module.exports.getMyOrders = async (req, res) => {
   return res.status(200).json(allMyOrders);
 };
 
-module.exports.getCurrentOrder = async (req, res) => {
+module.exports.getAllOrders = async (req, res) => {
+  const allOffers = await ordersModel.fetchAllOffers();
+  return res.status(200).json(allOffers);
+};
 
-  const { userId, orderId } = req.params;
+module.exports.getAllCompletedOrders = async (req, res) => {
 
-  const currentOrder = await ordersModel.findOrderIdUserId(userId, orderId);
+  const {userId} = req.params;
+
+  const currentOrder = await ordersModel.findCompletedOrders(userId);
+
+  if (!currentOrder) {
+    throw new NotFoundError("No current order found for the given order_id and user_id")
+  }
+
+  return res.status(200).json(currentOrder);
+};
+
+module.exports.getCurrentOrders = async (req, res) => {
+
+  const { userId } = req.params;
+
+  const currentOrder = await ordersModel.findOrderIdUserId(userId);
 
   if (!currentOrder) {
     throw new NotFoundError("No current order found for the given order_id and user_id")

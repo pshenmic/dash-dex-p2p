@@ -7,22 +7,21 @@ class Chat {
 
     toRow() {
         return {
-            dash_amount: this.text ?? null,
-            fiat_amount: this.author_id ?? null,
-            is_maker_buying: this.order_id ?? null,
+            text: this.text ?? null,
+            author_id: this.author_id ?? null,
+            order_id: this.order_id ?? null,
         }
     }
 
-    static fromRow({ dash_amount, fiat_amount, is_maker_buying,
+    static fromRow({ text, author_id, order_id,
     }) {
         return new Chat(
-            dash_amount, fiat_amount, is_maker_buying,
+            text, author_id, order_id,
         );
     }
 
-    static fromJSON({ text, author_id,
-    }) {
-        return new Chat(text, author_id,);
+    static fromJSON({ text, author_id, order_id}) {
+        return new Chat(text, author_id, order_id);
     }
 
 }

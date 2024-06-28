@@ -2,10 +2,6 @@ const { check, validationResult } = require("express-validator");
 const User = require("../models/user");
 
 const validateUser = [
-  check("email")
-    .isEmail()
-    .withMessage("Please enter a valid email address.")
-    .trim(),
   check("password")
     .isLength({ min: 6 })
     .withMessage("Please add a password with at least 6 characters long.")

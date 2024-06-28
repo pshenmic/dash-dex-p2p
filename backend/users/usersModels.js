@@ -6,14 +6,12 @@ const findBy = filter => {
     .first();
 };
 
-const findById = id => {
-  return db("users")
+const findById = async id => {
+  return await db("users")
     .where({ id })
     .select(
       "id",
       "username",
-      "email",
-      "push_notification"
     )
     .first();
 };
@@ -23,16 +21,15 @@ const findByUsername = username => {
     .where({ username })
 };
 
-const findExistingUser = (username, email) => {
+const findExistingUser = (username) => {
   return db("users")
   .where(builder => {
     builder.where("username", username)
-           .orWhere("email", email);
   });
 };
 
 const createUser = async user => {
-  return db("users").insert(user, ["id", "email", "username"]);
+  return db("users").insert(user, ["id", "username"]);
 };
 
 const updateUser = async (id, user) => {
@@ -41,7 +38,6 @@ const updateUser = async (id, user) => {
     .update(user, [
       "id",
       "username",
-      "email",
       "push_notification",
       "email_notification"
     ]);

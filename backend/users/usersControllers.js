@@ -8,18 +8,16 @@ const ServerError = require("../errors/server.error");
 
 module.exports.signup = async (req, res) => {
   
-  const { email, username, password } = userModel.fromJSON(req.body);
-
-  const existingUser = await User.findExistingUser(username,email);
+  const { username, password } = userModel.fromJSON(req.body);
+  const existingUser = await User.findExistingUser(username);
 
   if (existingUser.length !== 0) {
-    throw new AlreadyExist("User with provided email or username already exists!")
+    throw new AlreadyExist("User with provided username already exists!")
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const newUser = await User.createUser({
-    email,
     username,
     password: hashedPassword
   });
@@ -41,7 +39,11 @@ module.exports.login = async (req, res) => {
   }
 
   const user = await User.findBy({ username });
+  const isPasswordMatch = await bcrypt.compare(password, user.password).then(res => res)
 
+  if(!isPasswordMatch) {
+    throw new BadRequest('Please enter correct password')
+  }
   if (user && bcrypt.compare(password, user.password)) {
 
     if (user.isBlocked) {
@@ -58,11 +60,3 @@ module.exports.login = async (req, res) => {
 
   throw new ServerError("Something went wrong")
 };
-
-// just for auth user testing It will be removed 
-module.exports.checkUser = async (req, res) => {
-  return res.status(200).json({
-    message: 'success'
-  })
-
-}

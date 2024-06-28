@@ -1,4 +1,8 @@
 const offersModel = require("./offersModel.js");
+const ordersModel = require("../orders/ordersModel.js");
+const usersModel = require("../users/usersModels.js");
+
+
 const io = require("../socket.js");
 const { offerModel } = require("./offersHelper.js");
 const NotFoundError = require("../errors/not.found.error.js");
@@ -33,6 +37,11 @@ module.exports.getOffer = async (req, res) => {
 
 module.exports.createOffer = async (req, res) => {
     const newOffer = offerModel.fromJSON(req.body)
+    const checkUser = await usersModel.findById(req?.body?.makerId).then(user => user)
+
+    if(!checkUser) {
+      throw new NotFoundError("Maker id not found")
+    }
 
     const newOfferId = await offersModel.saveOffer(newOffer);
 
@@ -63,7 +72,6 @@ module.exports.updateOffer = async (req, res) => {
     }
 
     io.getIO().emit("offers", { action: "update", offer: updateComplete });
-    //console.log("getIO", io.getIO());
 
     return res.status(200).json(updateComplete);
 };
@@ -72,15 +80,55 @@ module.exports.deleteOffer = async (req, res) => {
 
     const { offerId } = req.params;
 
-    const isOfferExist = offersModel.checkOfferExistence(offerId);
+    const isOfferExist = await offersModel.checkOfferExistence(offerId);
 
-    if (!isOfferExist) {
+    if (isOfferExist.length === 0) {
       throw new NotFoundError("Offer or User not found!")
     }
 
-    const result = await offersModel.deleteOfferById(offerId);
+    const isOrderLinkedWithit = ordersModel.findOrderByOfferId(offerId)
+    isOrderLinkedWithit.then(async (orders) => {
+      if (orders?.length === 0) {
 
-    io.getIO().emit("offers", { action: "delete", id: result });
+        const result = await offersModel.deleteOfferById(offerId);
 
-    return res.status(200).json(result);
+        io.getIO().emit("offers", { action: "delete", id: result });
+
+        return res.status(200).json({ message: "offer deleted successfully!" });
+      } else {
+        return res.status(200).json({ message: "Offer can't be deleted in current state" });
+      }
+    })
+
+};
+
+module.exports.pauseOffer = async (req, res) => {
+
+  const { offerId } = req.params;
+
+  const isOfferExist = await offersModel.checkOfferExistence(offerId);
+
+  if (isOfferExist?.length === 0) {
+    throw new NotFoundError("Offer or User not found!")
+  }
+
+  let pauseValue = isOfferExist[0].pause
+  const isOrderLinkedWithit = ordersModel.findOrderByOfferId(offerId)
+  isOrderLinkedWithit.then(async (orders) => {
+    if (orders?.length === 0) {
+
+      const updateComplete = await offersModel.pauseTheOffer(offerId, pauseValue);
+
+      if (!updateComplete) {
+        throw new NotFoundError("Not Found!")
+      }
+
+      io.getIO().emit("offers", { action: "update", offer: updateComplete });
+
+      return res.status(200).json({ message: "offer updated successfully!" });
+    } else {
+      return res.status(200).json({ message: "Offer can't be updated in current state" });
+    }
+  })
+
 };

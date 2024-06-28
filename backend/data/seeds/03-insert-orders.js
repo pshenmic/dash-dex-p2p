@@ -1,22 +1,21 @@
-const createFakeOrders = (value) => {
-  let boolVal = value <= 3 ? true : false;
+const createFakeOrder = () => {
+  const boolVal = Math.random() <= 0.5;
   return {
-    complete: boolVal,
-    cancelled: value >= 7 ? boolVal : !boolVal,
-    maker_id: value,
-    taker_id: 21,
-    offer_id: value,
+    is_complete: boolVal,
+    status: boolVal ? 'completed' : 'created',
+    is_maker_buying: boolVal,
+    maker_id: 1,
+    taker_id: 3,
+    offer_id: 1,
     price_dash: "250",
     dash_amount: "2",
     fiat_amount: "500",
-    is_maker_buying: boolVal,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
   };
 };
-module.exports.seed = function (knex) {
-  let fakeOrders = [];
-  for (let i = 1; i < 11; i++) {
-    fakeOrders.push(createFakeOrders(i));
-  }
 
-  return knex("orders").insert(fakeOrders);
+module.exports.seed = function (knex) {
+  const fakeOrder = createFakeOrder();
+  return knex("orders").insert(fakeOrder);
 };
